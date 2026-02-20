@@ -1,0 +1,25 @@
+<svg width="800" height="420" viewBox="0 0 800 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="420" fill="#070707"/>
+  <rect x="16" y="16" width="768" height="388" rx="8" stroke="#FF2E2E" stroke-opacity="0.6" stroke-width="2"/>
+  <circle cx="672" cy="88" r="54" fill="#FCE300" fill-opacity="0.12"/>
+  <circle cx="122" cy="314" r="88" fill="#FF2E2E" fill-opacity="0.08"/>
+  <text x="60" y="120" fill="#FCE300" font-family="Courier New, monospace" font-size="18" letter-spacing="4">
+    HIDDEN CHANNEL // VIALISM
+  </text>
+  <text x="60" y="172" fill="#FF2E2E" font-family="Courier New, monospace" font-size="42" letter-spacing="8">
+    STAY ALIVE
+  </text>
+  <text x="60" y="222" fill="#E5E5E5" font-family="Courier New, monospace" font-size="14" letter-spacing="2">
+    ACCESS KEY ACCEPTED. BANDITOS RELAY UNLOCKED.
+  </text>
+  <line x1="60" y1="252" x2="740" y2="252" stroke="#FF2E2E" stroke-opacity="0.45"/>
+  <text x="60" y="292" fill="#E5E5E5" font-family="Courier New, monospace" font-size="13" letter-spacing="1.5">
+    SIGNAL ORIGIN: DEMA EDGE NODE
+  </text>
+  <text x="60" y="322" fill="#E5E5E5" font-family="Courier New, monospace" font-size="13" letter-spacing="1.5">
+    ENCRYPTION: TRENCH-42
+  </text>
+  <text x="60" y="352" fill="#E5E5E5" font-family="Courier New, monospace" font-size="13" letter-spacing="1.5">
+    STATUS: COMPROMISED // CONTROLLED
+  </text>
+</svg>
