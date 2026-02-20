@@ -15,7 +15,9 @@ export default function ClassifiedPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!supabase) {
+    const client = supabase;
+
+    if (!client) {
       setIsLoading(false);
       return;
     }
@@ -23,7 +25,7 @@ export default function ClassifiedPage() {
     let isMounted = true;
 
     const loadSession = async () => {
-      const { data } = await supabase.auth.getSession();
+      const { data } = await client.auth.getSession();
       if (!isMounted) return;
       setSession(data.session);
       setIsLoading(false);
@@ -33,7 +35,7 @@ export default function ClassifiedPage() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+    } = client.auth.onAuthStateChange((_event, nextSession) => {
       setSession(nextSession);
     });
 
@@ -44,8 +46,9 @@ export default function ClassifiedPage() {
   }, []);
 
   const handleSignOut = async () => {
-    if (!supabase) return;
-    await supabase.auth.signOut();
+    const client = supabase;
+    if (!client) return;
+    await client.auth.signOut();
   };
 
   return (
