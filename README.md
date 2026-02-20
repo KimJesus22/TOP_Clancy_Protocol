@@ -57,6 +57,10 @@ The console is optional and does not block the main navigation.
 - Cada album en la timeline puede expandirse para mostrar su iframe publico de Spotify.
 - Los `spotifyEmbedId` actuales son placeholders y se pueden reemplazar por IDs reales cuando quieras.
 
+## Vista en vivo / Live Demo
+
+- Produccion (Vercel): `https://top-clancy-protocol.vercel.app/`
+
 ## Ejecucion local / Local Run
 
 ```bash

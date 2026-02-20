@@ -2,7 +2,11 @@
 
 import { motion } from "framer-motion";
 import { FormEvent, useState } from "react";
-import { supabase } from "@/src/lib/supabaseClient";
+import {
+  isSupabaseConfigured,
+  supabase,
+  supabaseConfigError,
+} from "@/src/lib/supabaseClient";
 
 export default function BanditoLogin() {
   const [email, setEmail] = useState("");
@@ -12,6 +16,10 @@ export default function BanditoLogin() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!supabase) {
+      setError(supabaseConfigError ?? "Supabase no configurado.");
+      return;
+    }
 
     setIsSubmitting(true);
     setMessage(null);
@@ -54,6 +62,11 @@ export default function BanditoLogin() {
       <p className="mt-3 text-sm text-zinc-300">
         Ingresa tu correo para recibir un Magic Link de acceso seguro.
       </p>
+      {!isSupabaseConfigured ? (
+        <p className="mt-2 text-sm text-clancy-fire">
+          Supabase no esta configurado. Revisa variables de entorno.
+        </p>
+      ) : null}
 
       <form onSubmit={handleSubmit} className="mt-5 space-y-4">
         <div>
@@ -66,7 +79,8 @@ export default function BanditoLogin() {
           <input
             id="bandito-email"
             type="email"
-            required
+          required
+          disabled={!isSupabaseConfigured}
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             className="w-full rounded-md border border-zinc-600/60 bg-black/60 px-3 py-2 text-zinc-100 outline-none transition focus:border-clancy-fire/80 focus:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
@@ -76,7 +90,7 @@ export default function BanditoLogin() {
 
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !isSupabaseConfigured}
           className="w-full rounded-md border border-clancy-fire/70 bg-clancy-fire/20 px-4 py-2 font-mono text-sm uppercase tracking-[0.08em] text-clancy-fire transition hover:shadow-[0_0_14px_rgba(255,46,46,0.3)] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting

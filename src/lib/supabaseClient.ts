@@ -2,23 +2,26 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 type Database = Record<string, never>;
 
-function getEnvVar(name: "NEXT_PUBLIC_SUPABASE_URL" | "NEXT_PUBLIC_SUPABASE_ANON_KEY"): string {
-  const value = process.env[name];
+type SupabaseEnvName = "NEXT_PUBLIC_SUPABASE_URL" | "NEXT_PUBLIC_SUPABASE_ANON_KEY";
 
-  if (!value) {
-    throw new Error(
-      `[Supabase] Missing environment variable: ${name}. ` +
-        "Check your .env or .env.local configuration.",
-    );
-  }
+const supabaseEnv: Record<SupabaseEnvName, string | undefined> = {
+  NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+};
 
-  return value;
-}
+const missingVars = Object.entries(supabaseEnv)
+  .filter(([, value]) => !value)
+  .map(([key]) => key as SupabaseEnvName);
 
-const supabaseUrl = getEnvVar("NEXT_PUBLIC_SUPABASE_URL");
-const supabaseAnonKey = getEnvVar("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+export const isSupabaseConfigured = missingVars.length === 0;
 
-export const supabase: SupabaseClient<Database> = createClient<Database>(
-  supabaseUrl,
-  supabaseAnonKey,
-);
+export const supabaseConfigError = isSupabaseConfigured
+  ? null
+  : `[Supabase] Missing environment variable(s): ${missingVars.join(", ")}.`;
+
+export const supabase: SupabaseClient<Database> | null = isSupabaseConfigured
+  ? createClient<Database>(
+      supabaseEnv.NEXT_PUBLIC_SUPABASE_URL!,
+      supabaseEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    )
+  : null;

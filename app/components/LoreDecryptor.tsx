@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/src/lib/supabaseClient";
+import {
+  isSupabaseConfigured,
+  supabase,
+  supabaseConfigError,
+} from "@/src/lib/supabaseClient";
 
 type DemaMessage = {
   id: number;
@@ -16,6 +20,12 @@ export default function LoreDecryptor() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!supabase) {
+      setError(supabaseConfigError ?? "Supabase no configurado.");
+      setLoading(false);
+      return;
+    }
+
     let mounted = true;
 
     const loadMessages = async () => {
@@ -63,6 +73,12 @@ export default function LoreDecryptor() {
       <h2 className="mt-2 font-mono text-2xl tracking-[0.08em] text-clancy-fire">
         Mensajes cifrados de DEMA
       </h2>
+
+      {!isSupabaseConfigured ? (
+        <p className="mt-3 text-sm text-clancy-fire">
+          Supabase no esta configurado en este entorno.
+        </p>
+      ) : null}
 
       {loading ? <p className="mt-4 text-sm text-zinc-400">Cargando mensajes...</p> : null}
       {error ? <p className="mt-4 text-sm text-clancy-fire">Error: {error}</p> : null}
