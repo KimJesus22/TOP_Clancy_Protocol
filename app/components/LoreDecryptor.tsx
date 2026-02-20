@@ -20,7 +20,9 @@ export default function LoreDecryptor() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!supabase) {
+    const client = supabase;
+
+    if (!client) {
       setError(supabaseConfigError ?? "Supabase no configurado.");
       setLoading(false);
       return;
@@ -29,7 +31,7 @@ export default function LoreDecryptor() {
     let mounted = true;
 
     const loadMessages = async () => {
-      const { data, error: selectError } = await supabase
+      const { data, error: selectError } = await client
         .from("dema_messages")
         .select("id, message_title, decrypted_content, threat_level")
         .order("id", { ascending: true });
@@ -48,7 +50,7 @@ export default function LoreDecryptor() {
 
     loadMessages();
 
-    const channel = supabase
+    const channel = client
       .channel("dema-messages-feed")
       .on(
         "postgres_changes",
@@ -61,7 +63,7 @@ export default function LoreDecryptor() {
 
     return () => {
       mounted = false;
-      supabase.removeChannel(channel);
+      client.removeChannel(channel);
     };
   }, []);
 
