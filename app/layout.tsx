@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Fira_Code, Inter } from "next/font/google";
+import DemaRadioPlayer from "./components/DemaRadioPlayer";
+import ThemeApplier from "./components/ThemeApplier";
 import "./globals.css";
 
 const inter = Inter({
@@ -24,7 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${firaCode.variable}`}>{children}</body>
+      <body className={`${inter.variable} ${firaCode.variable}`}>
+        <ThemeApplier />
+        {children}
+        <DemaRadioPlayer />
+      </body>
     </html>
   );
 }

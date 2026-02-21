@@ -12,10 +12,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ComponentType, useEffect, useState } from "react";
 import BroadcastGallery from "./BroadcastGallery";
 import ChronologicalEvidence from "./ChronologicalEvidence";
+import DecodeChallenge from "./DecodeChallenge";
 import EvidenceGrid from "./EvidenceGrid";
 import LoreDecryptor from "./LoreDecryptor";
 import NetworkScanner from "./NetworkScanner";
 import TerminalInterface from "./TerminalInterface";
+import WalletIndicator from "./WalletIndicator";
 
 type NavItem = {
   id: string;
@@ -161,6 +163,19 @@ export default function SecureDashboard() {
 
       <main className="md:pl-72">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-4 pt-20 sm:p-6 sm:pt-24 md:p-10 md:pt-10">
+          <header className="sticky top-3 z-30 flex items-center justify-between rounded-xl border border-white/10 bg-black/40 px-4 py-3 backdrop-blur-md">
+            <p className="font-mono text-sm text-white">Operacion Trench Wallet</p>
+            <div className="flex items-center gap-2">
+              <a
+                href="/smuggler"
+                className="rounded-md border border-white/10 bg-black/30 px-3 py-1.5 text-sm text-gray-300 transition-all duration-300 hover:border-clancy-fire hover:text-white hover:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
+              >
+                Tienda de Contrabando
+              </a>
+              <WalletIndicator />
+            </div>
+          </header>
+
           <section
             id="inicio"
             className="rounded-xl border border-white/10 bg-black/40 p-6 shadow-[0_0_24px_rgba(255,46,46,0.16)] backdrop-blur-md"
@@ -190,6 +205,10 @@ export default function SecureDashboard() {
                 <p className="mt-1 font-mono text-2xl text-clancy-trench">78%</p>
               </article>
             </div>
+          </section>
+
+          <section className="scroll-mt-24">
+            <DecodeChallenge />
           </section>
 
           <section id="expedientes" className="scroll-mt-24">
