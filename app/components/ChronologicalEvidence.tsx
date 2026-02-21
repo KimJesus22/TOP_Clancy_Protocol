@@ -26,15 +26,15 @@ export default function ChronologicalEvidence() {
   const [expandedAlbumId, setExpandedAlbumId] = useState<string | null>(null);
 
   return (
-    <section className="scroll-mt-24 rounded-xl border border-clancy-fire/35 bg-black/45 p-6 shadow-[0_0_20px_rgba(255,46,46,0.14)]">
+    <section className="scroll-mt-24 rounded-xl border border-white/10 bg-black/40 p-6 shadow-[0_0_20px_rgba(255,46,46,0.14)] backdrop-blur-md">
       <header className="mb-6">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
           Chronological Evidence
         </p>
-        <h2 className="mt-2 font-mono text-2xl tracking-[0.08em] text-clancy-fire">
+        <h2 className="mt-2 font-mono text-2xl tracking-[0.08em] text-white">
           Timeline de Albumes
         </h2>
-        <p className="mt-3 text-sm text-zinc-300">
+        <p className="mt-3 text-sm text-gray-300">
           Registro cronologico de expedientes musicales clasificados.
         </p>
       </header>

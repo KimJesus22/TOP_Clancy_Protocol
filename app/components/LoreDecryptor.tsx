@@ -68,11 +68,11 @@ export default function LoreDecryptor() {
   }, []);
 
   return (
-    <section className="rounded-xl border border-clancy-fire/35 bg-black/45 p-6 shadow-[0_0_20px_rgba(255,46,46,0.14)]">
+    <section className="rounded-xl border border-white/10 bg-black/40 p-6 shadow-[0_0_20px_rgba(255,46,46,0.14)] backdrop-blur-md">
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
         Lore Decryptor
       </p>
-      <h2 className="mt-2 font-mono text-2xl tracking-[0.08em] text-clancy-fire">
+      <h2 className="mt-2 font-mono text-2xl tracking-[0.08em] text-white">
         Mensajes cifrados de DEMA
       </h2>
 

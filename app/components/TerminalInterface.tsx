@@ -110,12 +110,12 @@ ${AVAILABLE_COMMANDS.join("\n")}`);
   };
 
   return (
-    <section className="w-full rounded-xl border border-clancy-fire/35 bg-black/45 p-4 shadow-[0_0_20px_rgba(255,46,46,0.18)]">
+    <section className="w-full rounded-xl border border-white/10 bg-black/40 p-4 shadow-[0_0_20px_rgba(255,46,46,0.18)] backdrop-blur-md">
       <header className="mb-3">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
           Terminal Abierta
         </p>
-        <h3 className="mt-1 font-mono text-lg tracking-[0.08em] text-clancy-fire">
+        <h3 className="mt-1 font-mono text-lg tracking-[0.08em] text-white">
           Consola Operativa
         </h3>
       </header>

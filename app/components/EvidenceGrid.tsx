@@ -28,16 +28,16 @@ export default function EvidenceGrid() {
   const evidenceCount = useMemo(() => RECOVERED_EVIDENCE.length, []);
 
   return (
-    <section className="rounded-xl border border-clancy-fire/35 bg-black/45 p-6 shadow-[0_0_20px_rgba(255,46,46,0.14)]">
+    <section className="rounded-xl border border-white/10 bg-black/40 p-6 shadow-[0_0_20px_rgba(255,46,46,0.14)] backdrop-blur-md">
       <header className="mb-5">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
           Expedientes Recuperados
         </p>
         <div className="mt-2 flex items-end justify-between gap-3">
-          <h2 className="font-mono text-2xl tracking-[0.08em] text-clancy-fire">
+          <h2 className="font-mono text-2xl tracking-[0.08em] text-white">
             Evidence Grid
           </h2>
-          <p className="font-mono text-sm text-zinc-300">
+          <p className="font-mono text-sm text-gray-300">
             Total: {evidenceCount}
           </p>
         </div>
