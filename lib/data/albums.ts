@@ -72,4 +72,13 @@ export const topAlbums: AlbumRecord[] = [
     coverColor: "#FF6A00",
     spotifyEmbedId: "PLACEHOLDER_CLANCY_ID",
   },
+  {
+    id: "breach-2025",
+    title: "Breach",
+    releaseYear: 2025,
+    status: "Classified",
+    demaThreatLevel: 9,
+    coverColor: "#A855F7",
+    spotifyEmbedId: "PLACEHOLDER_BREACH_ID",
+  },
 ];
