@@ -32,6 +32,8 @@ It also includes hidden tools for technical users, such as an advanced console w
 - Network Scanner (radar de red) con progresos animados y categorias estilo Wappalyzer.
 - Trench Wallet (economia virtual) con codigos secretos y tienda de contrabando.
 - Reproductor global persistente "Dema Radio Player" con estado compartido.
+- Modulo EdTech `/learn` con motor interactivo `LyricQuizEngine`.
+- Endpoint publico `/login` para solicitar Magic Link de Supabase.
 - Zona restringida `/classified` con acceso autenticado y datos desde Supabase.
 - Pagina 404 personalizada con tematica de violacion de seguridad DEMA.
 
@@ -66,7 +68,8 @@ The console is optional and does not block the main navigation.
 - Componente `DecodeChallenge` con codigos secretos:
   - `SAHLOFOLINA`
   - `KEONS`
-- Recompensa por codigo valido: `+50` creditos.
+- Recompensa por codigo valido en `DecodeChallenge`: `+50` creditos.
+- Recompensa por respuesta correcta en `LyricQuizEngine`: `+10` creditos.
 - Tienda `/smuggler` para desbloquear temas visuales (ej. `Modo Blurryface`).
 
 ## Dema Radio Player (Global Audio)
@@ -84,6 +87,9 @@ The console is optional and does not block the main navigation.
   - valida sesion autenticada
   - consulta `dema_intercepts`
   - fallback con mensaje de acceso denegado si falla auth/permisos
+- Ruta publica `/login`:
+  - expone el formulario `BanditoLogin`
+  - envia Magic Link para acceso autenticado
 - Lore en tiempo real con `LoreDecryptor` sobre tabla `dema_messages`.
 
 ## Spotify Embeds

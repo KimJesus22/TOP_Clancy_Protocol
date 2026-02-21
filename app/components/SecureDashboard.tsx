@@ -18,6 +18,7 @@ import EvidenceGrid from "./EvidenceGrid";
 import LoreDecryptor from "./LoreDecryptor";
 import NetworkScanner from "./NetworkScanner";
 import TerminalInterface from "./TerminalInterface";
+import ThreatMap from "./ThreatMap";
 import WalletIndicator from "./WalletIndicator";
 
 type NavItem = {
@@ -231,6 +232,10 @@ export default function SecureDashboard() {
             className="scroll-mt-24"
           >
             <NetworkScanner />
+          </section>
+
+          <section className="scroll-mt-24">
+            <ThreatMap />
           </section>
 
           <section className="scroll-mt-24">

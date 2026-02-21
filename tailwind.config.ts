@@ -17,7 +17,14 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: [
+          "var(--font-inter)",
+          "var(--font-noto-kr)",
+          "var(--font-noto-jp)",
+          "ui-sans-serif",
+          "system-ui",
+          "sans-serif",
+        ],
         mono: [
           "var(--font-fira-code)",
           "Courier New",

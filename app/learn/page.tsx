@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BookOpen, Shield, Terminal, ArrowLeft } from "lucide-react";
-import LyricQuizEngine from "../components/LyricQuizEngine";
+import LearnLessonHub from "../components/LearnLessonHub";
 import { topLessons } from "@/src/lib/data/lessons";
 
 const modules = [
@@ -79,9 +79,7 @@ export default function LearnPage() {
         </div>
       </section>
 
-      <section className="mt-8">
-        <LyricQuizEngine lessons={topLessons} />
-      </section>
+      <LearnLessonHub lessons={topLessons} />
 
       <Link
         href="/"

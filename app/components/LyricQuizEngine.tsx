@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import type { LyricChallenge } from "@/src/lib/data/lessons";
 import { useTrenchWalletStore } from "@/src/store/trenchWalletStore";
+import { Volume2 } from "lucide-react";
 
 type LyricQuizEngineProps = {
   lessons: LyricChallenge[];
@@ -15,6 +16,7 @@ export default function LyricQuizEngine({ lessons }: LyricQuizEngineProps) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [lastWrongOption, setLastWrongOption] = useState<string | null>(null);
   const [solved, setSolved] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   const currentLesson = lessons[currentIndex];
   const progressLabel = `${currentIndex + 1}/${lessons.length}`;
@@ -23,6 +25,42 @@ export default function LyricQuizEngine({ lessons }: LyricQuizEngineProps) {
     if (!currentLesson) return "";
     return currentLesson.englishSnippet.replace("____", "[ _______ ]");
   }, [currentLesson]);
+
+  const onSpeakSnippet = () => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+      return;
+    }
+
+    const langMap: Record<LyricChallenge["language"], string> = {
+      English: "en-US",
+      Korean: "ko-KR",
+      Japanese: "ja-JP",
+    };
+
+    const targetLang = langMap[currentLesson.language];
+    const speakableText = currentLesson.englishSnippet.replace(/_+/g, " ... ");
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(speakableText);
+    utterance.lang = targetLang;
+
+    const voices = window.speechSynthesis.getVoices();
+    const matchedVoice =
+      voices.find((voice) => voice.lang.toLowerCase() === targetLang.toLowerCase()) ??
+      voices.find((voice) =>
+        voice.lang.toLowerCase().startsWith(targetLang.split("-")[0].toLowerCase()),
+      );
+    if (matchedVoice) {
+      utterance.voice = matchedVoice;
+    }
+
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    setIsSpeaking(true);
+    window.speechSynthesis.speak(utterance);
+  };
 
   if (!currentLesson) {
     return (
@@ -71,9 +109,19 @@ export default function LyricQuizEngine({ lessons }: LyricQuizEngineProps) {
       </div>
 
       <h3 className="mt-2 font-mono text-2xl text-white">{currentLesson.song}</h3>
-      <p className="mt-4 rounded-md border border-white/10 bg-black/35 p-4 font-mono text-base text-gray-200">
-        {visibleSnippet}
-      </p>
+      <div className="mt-4 flex items-start gap-3 rounded-md border border-white/10 bg-black/35 p-4">
+        <p className="flex-1 font-mono text-base text-gray-200">{visibleSnippet}</p>
+        <motion.button
+          type="button"
+          onClick={onSpeakSnippet}
+          aria-label="Leer frase en voz alta"
+          animate={isSpeaking ? { scale: [1, 1.08, 1], opacity: [1, 0.7, 1] } : { scale: 1, opacity: 1 }}
+          transition={isSpeaking ? { duration: 0.8, repeat: Infinity } : { duration: 0.2 }}
+          className="rounded-md border border-white/10 bg-black/30 p-2 text-gray-300 transition-all duration-300 hover:border-clancy-trench hover:text-white hover:shadow-[0_0_12px_rgba(252,227,0,0.2)]"
+        >
+          <Volume2 className="h-4 w-4" />
+        </motion.button>
+      </div>
       <p className="mt-2 text-xs text-gray-300">Pista: {currentLesson.hint}</p>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
