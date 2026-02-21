@@ -13,6 +13,7 @@ type TrenchWalletState = {
   usedCodes: string[];
   unlockedThemes: ThemeMode[];
   activeTheme: ThemeMode;
+  addCredits: (amount: number) => void;
   redeemCode: (code: string, reward?: number) => boolean;
   purchaseTheme: (theme: ThemeMode, cost: number) => PurchaseResult;
   setActiveTheme: (theme: ThemeMode) => void;
@@ -25,6 +26,11 @@ export const useTrenchWalletStore = create<TrenchWalletState>()(
       usedCodes: [],
       unlockedThemes: ["default"],
       activeTheme: "default",
+      addCredits: (amount) => {
+        if (amount <= 0) return;
+        const { credits } = get();
+        set({ credits: credits + amount });
+      },
       redeemCode: (code, reward = 50) => {
         const normalized = code.trim().toUpperCase();
         if (!normalized) return false;

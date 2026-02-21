@@ -10,6 +10,8 @@ An interactive cybersecurity-themed Dashboard inspired by the Twenty One Pilots 
 - Tailwind CSS
 - Framer Motion
 - Lucide React
+- Zustand
+- Supabase (`@supabase/supabase-js`, `@supabase/ssr`)
 
 ## Descripcion del proyecto / Project Description
 
@@ -21,18 +23,24 @@ It also includes hidden tools for technical users, such as an advanced console w
 
 ## Funcionalidades clave / Key Features
 
-- Sidebar responsive con navegacion clara para usuarios no tecnicos.
+- Sidebar responsive con Glassmorphism y navegacion por secciones.
+- Dashboard visual para usuarios no tecnicos + herramientas ocultas para usuarios avanzados.
 - Grid de expedientes con panel lateral de detalles forenses.
 - Timeline cronologica de albumes con animaciones por scroll.
 - Reproductores de Spotify embebidos por album (acordeon expandible).
-- Estetica Cyberpunk/Clancy con indicadores visuales de seguridad.
-- Consola oculta para exploracion avanzada.
+- Broadcast Gallery con videos oficiales en YouTube (iframes).
+- Network Scanner (radar de red) con progresos animados y categorias estilo Wappalyzer.
+- Trench Wallet (economia virtual) con codigos secretos y tienda de contrabando.
+- Reproductor global persistente "Dema Radio Player" con estado compartido.
+- Zona restringida `/classified` con acceso autenticado y datos desde Supabase.
+- Pagina 404 personalizada con tematica de violacion de seguridad DEMA.
 
 ## Datos locales / Local Static Data
 
 - Base de datos estatica local en `lib/data/albums.ts`.
 - Estructura tipada con TypeScript (`AlbumRecord`) para evitar costos de servidor.
 - Incluye metadatos de albumes: estado, nivel de amenaza DEMA, color y `spotifyEmbedId`.
+- Scripts SQL versionados en `supabase/` para schema y seed de lore.
 
 ## Terminal oculta / Hidden Terminal
 
@@ -52,6 +60,32 @@ Useful commands:
 La consola es opcional y no bloquea la navegacion principal.
 The console is optional and does not block the main navigation.
 
+## Trench Wallet + Smuggler Shop
+
+- Saldo global persistente de creditos usando Zustand.
+- Componente `DecodeChallenge` con codigos secretos:
+  - `SAHLOFOLINA`
+  - `KEONS`
+- Recompensa por codigo valido: `+50` creditos.
+- Tienda `/smuggler` para desbloquear temas visuales (ej. `Modo Blurryface`).
+
+## Dema Radio Player (Global Audio)
+
+- Reproductor fijo en la parte inferior (`fixed bottom-0 w-full`).
+- Controles: Play, Pause, Next, progreso y volumen.
+- Audio HTML5 conectado a estado global.
+- Persistente entre rutas para que la musica no se corte al navegar.
+
+## Supabase (Auth + Data)
+
+- Cliente browser en `src/lib/supabaseClient.ts`.
+- Cliente server SSR con cookies en `src/lib/supabaseServer.ts`.
+- Ruta protegida `/classified`:
+  - valida sesion autenticada
+  - consulta `dema_intercepts`
+  - fallback con mensaje de acceso denegado si falla auth/permisos
+- Lore en tiempo real con `LoreDecryptor` sobre tabla `dema_messages`.
+
 ## Spotify Embeds
 
 - Cada album en la timeline puede expandirse para mostrar su iframe publico de Spotify.
@@ -64,9 +98,21 @@ The console is optional and does not block the main navigation.
 ## Ejecucion local / Local Run
 
 ```bash
-cd clancy-protocol
 corepack pnpm install
 corepack pnpm dev
+```
+
+## Variables de entorno / Environment Variables
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+```
+
+Opcional (compatibilidad local previa):
+
+```env
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=...
 ```
 
 ## Scripts
