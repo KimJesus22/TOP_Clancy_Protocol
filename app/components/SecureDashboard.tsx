@@ -3,6 +3,7 @@
 import {
   Command,
   Home,
+  LogIn,
   Menu,
   Network,
   FolderOpen,
@@ -39,6 +40,12 @@ const navItems: NavItem[] = [
     label: "Analisis de Red",
     href: "#analisis-red",
     icon: Network,
+  },
+  {
+    id: "login",
+    label: "Login",
+    href: "/login",
+    icon: LogIn,
   },
 ];
 
