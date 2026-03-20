@@ -9,7 +9,7 @@ import {
 } from "@/src/lib/supabaseClient";
 
 export default function BanditoLogin() {
-  const [authMode, setAuthMode] = useState<"magic" | "password">("magic");
+  const [authMode, setAuthMode] = useState<"magic" | "password" | "register">("magic");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,12 +42,22 @@ export default function BanditoLogin() {
               },
             })
           ).error
-        : (
-            await supabase.auth.signInWithPassword({
-              email,
-              password,
-            })
-          ).error;
+        : authMode === "password"
+          ? (
+              await supabase.auth.signInWithPassword({
+                email,
+                password,
+              })
+            ).error
+          : (
+              await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                  emailRedirectTo: redirectTo,
+                },
+              })
+            ).error;
 
     if (authError) {
       setError(authError.message);
@@ -58,7 +68,9 @@ export default function BanditoLogin() {
     setMessage(
       authMode === "magic"
         ? "Enlace enviado. Revisa tu correo para acceder a Trench."
-        : "Sesion iniciada correctamente.",
+        : authMode === "password"
+          ? "Sesion iniciada correctamente."
+          : "Registro creado. Verifica tu correo para confirmar la cuenta.",
     );
     setIsSubmitting(false);
   };
@@ -108,6 +120,17 @@ export default function BanditoLogin() {
           >
             Correo + Contrasena
           </button>
+          <button
+            type="button"
+            onClick={() => setAuthMode("register")}
+            className={`rounded-md border px-3 py-1.5 text-xs transition-all duration-300 ${
+              authMode === "register"
+                ? "border-clancy-fire bg-clancy-fire/15 text-clancy-fire"
+                : "border-zinc-600/60 bg-black/40 text-zinc-300 hover:border-clancy-fire/70"
+            }`}
+          >
+            Register
+          </button>
         </div>
 
         <div>
@@ -129,7 +152,7 @@ export default function BanditoLogin() {
           />
         </div>
 
-        {authMode === "password" ? (
+        {authMode === "password" || authMode === "register" ? (
           <div>
             <label
               htmlFor="bandito-password"
@@ -158,7 +181,9 @@ export default function BanditoLogin() {
             ? "Transmitiendo..."
             : authMode === "magic"
               ? "Solicitar Acceso a la Resistencia"
-              : "Iniciar Sesion"}
+              : authMode === "password"
+                ? "Iniciar Sesion"
+                : "Crear Cuenta"}
         </button>
       </form>
 

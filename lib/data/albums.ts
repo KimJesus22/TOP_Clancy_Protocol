@@ -1,3 +1,8 @@
+export type BilingualCopy = {
+  es: string;
+  en: string;
+};
+
 export interface AlbumRecord {
   id: string;
   title: string;
@@ -6,6 +11,11 @@ export interface AlbumRecord {
   demaThreatLevel: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
   coverColor: `#${string}`;
   spotifyEmbedId: string;
+  sourceCoverage: "Detailed" | "Contextual";
+  summary: BilingualCopy;
+  keyMoments: BilingualCopy[];
+  loreSignals: BilingualCopy[];
+  linkedEntities: string[];
 }
 
 export const topAlbums: AlbumRecord[] = [
@@ -16,7 +26,25 @@ export const topAlbums: AlbumRecord[] = [
     status: "Public",
     demaThreatLevel: 4,
     coverColor: "#8B0000",
-    spotifyEmbedId: "PLACEHOLDER_SELF_TITLED_ID",
+    spotifyEmbedId: "1Fexc96V24RL17Ko9VXUOM",
+    sourceCoverage: "Contextual",
+    summary: {
+      es: "El PDF lo menciona solo como parte del catalogo final recomendado; no desarrolla una etapa narrativa propia dentro del conflicto DEMA/Trench.",
+      en: "The PDF only mentions it in the final album list and does not develop it as a standalone chapter inside the DEMA/Trench conflict.",
+    },
+    keyMoments: [
+      {
+        es: "Funciona como antecedente musical, pero no recibe un dossier narrativo dentro del documento.",
+        en: "It works as musical background, but it does not receive a narrative dossier in the document.",
+      },
+    ],
+    loreSignals: [
+      {
+        es: "Cobertura del PDF: contextual.",
+        en: "PDF coverage: contextual.",
+      },
+    ],
+    linkedEntities: ["Catalogo base", "Pre-lore"],
   },
   {
     id: "regional-at-best-2011",
@@ -26,6 +54,24 @@ export const topAlbums: AlbumRecord[] = [
     demaThreatLevel: 8,
     coverColor: "#5F9EA0",
     spotifyEmbedId: "PLACEHOLDER_REGIONAL_AT_BEST_ID",
+    sourceCoverage: "Contextual",
+    summary: {
+      es: "El PDF no lo desarrolla como capitulo propio; permanece fuera del eje principal que arranca formalmente con Blurryface.",
+      en: "The PDF does not develop it as its own chapter; it remains outside the main axis that formally starts with Blurryface.",
+    },
+    keyMoments: [
+      {
+        es: "Se conserva en la cronologia, pero sin expansion narrativa especifica en el documento.",
+        en: "It remains in the chronology, but without specific narrative expansion in the document.",
+      },
+    ],
+    loreSignals: [
+      {
+        es: "Cobertura del PDF: contextual.",
+        en: "PDF coverage: contextual.",
+      },
+    ],
+    linkedEntities: ["Catalogo base", "Pre-lore"],
   },
   {
     id: "vessel-2013",
@@ -34,7 +80,25 @@ export const topAlbums: AlbumRecord[] = [
     status: "Public",
     demaThreatLevel: 5,
     coverColor: "#F2D16B",
-    spotifyEmbedId: "PLACEHOLDER_VESSEL_ID",
+    spotifyEmbedId: "2r2r78NE05YjyHyVbVgqFn",
+    sourceCoverage: "Contextual",
+    summary: {
+      es: "El PDF lo cita en recopilatorios y materiales previos a Trench, pero no le dedica un capitulo narrativo completo.",
+      en: "The PDF cites it in recap material and pre-Trench context, but it does not receive a full narrative chapter.",
+    },
+    keyMoments: [
+      {
+        es: "Aparece como parte de los videos recopilatorios que terminan conduciendo al hallazgo de `dmaorg.info`.",
+        en: "It appears as part of the recap videos that eventually lead to the discovery of `dmaorg.info`.",
+      },
+    ],
+    loreSignals: [
+      {
+        es: "Sirve como antesala al descubrimiento del sitio de DEMA durante el hiatus.",
+        en: "It acts as a prelude to the DEMA website discovery during the hiatus.",
+      },
+    ],
+    linkedEntities: ["dmaorg.info", "Recap videos"],
   },
   {
     id: "blurryface-2015",
@@ -43,7 +107,37 @@ export const topAlbums: AlbumRecord[] = [
     status: "Classified",
     demaThreatLevel: 9,
     coverColor: "#FF2E2E",
-    spotifyEmbedId: "PLACEHOLDER_BLURRYFACE_ID",
+    spotifyEmbedId: "3cQO7jp5S9qLBoIVtbkSM1",
+    sourceCoverage: "Detailed",
+    summary: {
+      es: "El PDF presenta a Blurryface como la puerta de entrada a la historia: Tyler personifica sus miedos e inseguridades en una figura de voz grave, ojos rojos y control constante sobre su vida.",
+      en: "The PDF presents Blurryface as the entry point to the story: Tyler personifies his fears and insecurities in a figure with a deep voice, red eyes, and constant control over his life.",
+    },
+    keyMoments: [
+      {
+        es: "Los nueve circulos del album se leen como nueve miedos distintos y anticipan la futura estructura de los nueve obispos de DEMA.",
+        en: "The album's nine circles are read as nine distinct fears and foreshadow the later structure of DEMA's nine bishops.",
+      },
+      {
+        es: "El cuello y las manos negras representan el dominio de esas inseguridades sobre Tyler.",
+        en: "The black neck and hands represent those insecurities taking hold of Tyler.",
+      },
+      {
+        es: "El final de `Goner` enlazado con `Heavydirtysoul` y el video de `Heavydirtysoul` refuerzan la idea de un ciclo que vuelve a empezar.",
+        en: "The `Goner` to `Heavydirtysoul` loop and the `Heavydirtysoul` video reinforce the idea of a cycle that starts over again.",
+      },
+    ],
+    loreSignals: [
+      {
+        es: "Blurryface conduce el auto en `Heavydirtysoul`, simbolizando control mental y no solo presencia fisica.",
+        en: "Blurryface drives the car in `Heavydirtysoul`, symbolizing mental control rather than only physical presence.",
+      },
+      {
+        es: "El PDF conecta despues a Blurryface con Nico y, por extension, con la red completa de obispos.",
+        en: "The PDF later connects Blurryface to Nico and, by extension, to the full bishop network.",
+      },
+    ],
+    linkedEntities: ["Blurryface", "Tyler", "Nico", "Obispos", "Heavydirtysoul"],
   },
   {
     id: "trench-2018",
@@ -52,7 +146,37 @@ export const topAlbums: AlbumRecord[] = [
     status: "Classified",
     demaThreatLevel: 7,
     coverColor: "#FCE300",
-    spotifyEmbedId: "PLACEHOLDER_TRENCH_ID",
+    spotifyEmbedId: "621cXqrTSSJi1WqDMSLmbL",
+    sourceCoverage: "Detailed",
+    summary: {
+      es: "Trench expande el universo con DEMA, los Banditos y las cartas de Clancy. El PDF lo define como el momento en que la narrativa se vuelve explicita, geografica y politica.",
+      en: "Trench expands the universe with DEMA, the Banditos, and Clancy's letters. The PDF defines it as the moment when the narrative becomes explicit, geographic, and political.",
+    },
+    keyMoments: [
+      {
+        es: "El hiatus abre `dmaorg.info`, revela mensajes ocultos como `EAST IS UP` y presenta el mapa de DEMA junto con las cartas de Clancy.",
+        en: "The hiatus opens `dmaorg.info`, reveals hidden messages like `EAST IS UP`, and introduces the DEMA map alongside Clancy's letters.",
+      },
+      {
+        es: "La trilogia `Jumpsuit`, `Nico and the Niners` y `Levitate` muestra a Tyler entrando y saliendo de DEMA con ayuda de los Banditos.",
+        en: "The `Jumpsuit`, `Nico and the Niners`, and `Levitate` trilogy shows Tyler moving in and out of DEMA with help from the Banditos.",
+      },
+      {
+        es: "Ned aparece en `Chlorine` como dispositivo de neuroexpansion y anticipo del poder que despues permitira las posesiones.",
+        en: "Ned appears in `Chlorine` as the neuro expansion device and foreshadows the power that later enables possession.",
+      },
+    ],
+    loreSignals: [
+      {
+        es: "El PDF concluye que DEMA esta controlada por nueve obispos que encarnan distintos miedos e inseguridades de Tyler.",
+        en: "The PDF concludes that DEMA is controlled by nine bishops who embody different fears and insecurities of Tyler.",
+      },
+      {
+        es: "Josh es el portador de la antorcha y lider Bandito; Trench funciona como refugio parcial, no como seguridad permanente.",
+        en: "Josh is the torchbearer and Bandito leader; Trench acts as partial refuge, not permanent safety.",
+      },
+    ],
+    linkedEntities: ["Clancy", "DEMA", "Banditos", "Josh", "Ned", "dmaorg.info"],
   },
   {
     id: "scaled-and-icy-2021",
@@ -61,7 +185,37 @@ export const topAlbums: AlbumRecord[] = [
     status: "Public",
     demaThreatLevel: 3,
     coverColor: "#7DD3FC",
-    spotifyEmbedId: "PLACEHOLDER_SCALED_AND_ICY_ID",
+    spotifyEmbedId: "0Q5XBpCYFgUWiG9DUWyAmJ",
+    sourceCoverage: "Detailed",
+    summary: {
+      es: "Scaled and Icy aparece en el PDF como propaganda producida por DEMA: un album brillante por fuera que oculta coercion, vigilancia y una guerra interna cada vez mas abierta.",
+      en: "Scaled and Icy appears in the PDF as propaganda produced by DEMA: an outwardly bright album hiding coercion, surveillance, and an increasingly open internal war.",
+    },
+    keyMoments: [
+      {
+        es: "La web de DEMA borra las cartas previas, publica el mensaje legal del municipio y consolida la frase `Clancy is dead`.",
+        en: "The DEMA website erases the previous letters, publishes the municipality's legal message, and solidifies the phrase `Clancy is dead`.",
+      },
+      {
+        es: "El livestream funciona como extension narrativa: los obispos interrumpen el show cuando Tyler se acerca demasiado a la verdad.",
+        en: "The livestream works as a narrative extension: the bishops interrupt the show whenever Tyler gets too close to the truth.",
+      },
+      {
+        es: "En `Saturday` y `The Outside`, Keons traiciona a los obispos, ayuda a escapar a Tyler y Josh, y su cuerpo termina siendo la vasija de la contraofensiva.",
+        en: "In `Saturday` and `The Outside`, Keons betrays the bishops, helps Tyler and Josh escape, and his body becomes the vessel for the counteroffensive.",
+      },
+    ],
+    loreSignals: [
+      {
+        es: "El album es un anagrama de `Clancy is dead`, una pista que el PDF considera clave para leer toda la era.",
+        en: "The album is an anagram of `Clancy is dead`, a clue the PDF treats as key to reading the whole era.",
+      },
+      {
+        es: "Los cuernos de Ned se convierten en arma y abren el uso consciente de la posesion contra DEMA.",
+        en: "Ned's antlers become a weapon and open the path to conscious use of possession against DEMA.",
+      },
+    ],
+    linkedEntities: ["Keons", "Ned", "Trash", "Livestream", "Vialismo", "DEMA"],
   },
   {
     id: "clancy-2024",
@@ -70,15 +224,36 @@ export const topAlbums: AlbumRecord[] = [
     status: "Classified",
     demaThreatLevel: 10,
     coverColor: "#FF6A00",
-    spotifyEmbedId: "PLACEHOLDER_CLANCY_ID",
-  },
-  {
-    id: "breach-2025",
-    title: "Breach",
-    releaseYear: 2025,
-    status: "Classified",
-    demaThreatLevel: 9,
-    coverColor: "#A855F7",
-    spotifyEmbedId: "PLACEHOLDER_BREACH_ID",
+    spotifyEmbedId: "5duZXH6bekAO8764WN9cYx",
+    sourceCoverage: "Detailed",
+    summary: {
+      es: "La era Clancy retoma la guerra de frente. El PDF la describe como el intento mas directo de romper el ciclo: Clancy vuelve a Trench, enseña a otros a rebelarse y empieza la destruccion de DEMA desde dentro.",
+      en: "The Clancy era resumes the war head-on. The PDF describes it as the most direct attempt to break the cycle: Clancy returns to Trench, teaches others to rebel, and begins DEMA's destruction from within.",
+    },
+    keyMoments: [
+      {
+        es: "Las cartas anonimas previas a `Overcompensate`, el video `I am Clancy` y los sobres rojos reconstruyen la historia desde la perspectiva de Clancy/Tyler.",
+        en: "The anonymous letters before `Overcompensate`, the `I am Clancy` video, and the red envelopes reconstruct the story from Clancy/Tyler's perspective.",
+      },
+      {
+        es: "En `Overcompensate`, Clancy posee un cuerpo dentro de DEMA para instruir y reclutar ciudadanos; el ataque ya no es solo escape, ahora es organizacion.",
+        en: "In `Overcompensate`, Clancy possesses a body inside DEMA to instruct and recruit citizens; the attack is no longer only escape, but organization.",
+      },
+      {
+        es: "`Next Semester` y `Backslide` no avanzan la trama principal, pero el PDF los lee como espejos del ciclo, la recaida y la lucha interna.",
+        en: "`Next Semester` and `Backslide` do not move the main plot forward, but the PDF reads them as mirrors of the cycle, relapse, and internal struggle.",
+      },
+    ],
+    loreSignals: [
+      {
+        es: "Paladin Strait se vuelve frontera simbolica y linea de meta; el fuego rojo y amarillo visualiza la guerra entre obispos y Banditos.",
+        en: "Paladin Strait becomes a symbolic border and finish line; the red and yellow fire visualizes the war between bishops and Banditos.",
+      },
+      {
+        es: "El PDF cierra con la idea de que la batalla final contra Blurryface todavia sigue en desarrollo.",
+        en: "The PDF closes with the idea that the final battle against Blurryface is still unfolding.",
+      },
+    ],
+    linkedEntities: ["Clancy", "Overcompensate", "Paladin Strait", "Banditos", "Josh", "DEMA"],
   },
 ];

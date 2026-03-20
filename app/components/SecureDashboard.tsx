@@ -15,6 +15,7 @@ import BroadcastGallery from "./BroadcastGallery";
 import ChronologicalEvidence from "./ChronologicalEvidence";
 import DecodeChallenge from "./DecodeChallenge";
 import EvidenceGrid from "./EvidenceGrid";
+import ActClancyBriefing from "./ActClancyBriefing";
 import LoreDecryptor from "./LoreDecryptor";
 import NetworkScanner from "./NetworkScanner";
 import TerminalInterface from "./TerminalInterface";
@@ -206,7 +207,7 @@ export default function SecureDashboard() {
               </article>
               <article className="rounded-md border border-white/10 bg-black/40 p-3 backdrop-blur-md">
                 <p className="text-xs text-gray-300">Expedientes auditados</p>
-                <p className="mt-1 font-mono text-2xl text-clancy-fire">02</p>
+                <p className="mt-1 font-mono text-2xl text-clancy-fire">08</p>
               </article>
               <article className="rounded-md border border-white/10 bg-black/40 p-3 backdrop-blur-md">
                 <p className="text-xs text-gray-300">Riesgo DEMA</p>
@@ -217,6 +218,10 @@ export default function SecureDashboard() {
 
           <section className="scroll-mt-24">
             <DecodeChallenge />
+          </section>
+
+          <section className="scroll-mt-24">
+            <ActClancyBriefing />
           </section>
 
           <section id="expedientes" className="scroll-mt-24">
