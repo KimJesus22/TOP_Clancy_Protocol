@@ -10,7 +10,7 @@ import {
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ComponentType, useEffect, useState } from "react";
+import { ComponentType, useEffect, useRef, useState } from "react";
 import BroadcastGallery from "./BroadcastGallery";
 import ChronologicalEvidence from "./ChronologicalEvidence";
 import DecodeChallenge from "./DecodeChallenge";
@@ -21,6 +21,7 @@ import NetworkScanner from "./NetworkScanner";
 import TerminalInterface from "./TerminalInterface";
 import ThreatMap from "./ThreatMap";
 import WalletIndicator from "./WalletIndicator";
+import { getFocusableElements, trapFocusInContainer } from "@/src/lib/accessibility";
 
 type NavItem = {
   id: string;
@@ -61,11 +62,18 @@ export default function SecureDashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [terminalOpen, setTerminalOpen] = useState(false);
   const [secretFound, setSecretFound] = useState(false);
+  const mobileMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const mobileMenuRef = useRef<HTMLElement | null>(null);
+  const mobileMenuCloseRef = useRef<HTMLButtonElement | null>(null);
+  const terminalDialogRef = useRef<HTMLElement | null>(null);
+  const terminalCloseRef = useRef<HTMLButtonElement | null>(null);
+  const terminalTriggerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === "t") {
         event.preventDefault();
+        terminalTriggerRef.current = document.activeElement as HTMLElement | null;
         setTerminalOpen(true);
       }
     };
@@ -74,9 +82,56 @@ export default function SecureDashboard() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      mobileMenuTriggerRef.current?.focus();
+      return;
+    }
+
+    mobileMenuCloseRef.current?.focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setMobileMenuOpen(false);
+        return;
+      }
+
+      trapFocusInContainer(event, mobileMenuRef.current);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    if (!terminalOpen) {
+      terminalTriggerRef.current?.focus();
+      return;
+    }
+
+    const focusableElements = getFocusableElements(terminalDialogRef.current);
+    const firstTarget = terminalCloseRef.current ?? focusableElements[0];
+    firstTarget?.focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setTerminalOpen(false);
+        return;
+      }
+
+      trapFocusInContainer(event, terminalDialogRef.current);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [terminalOpen]);
+
   return (
     <div className="min-h-screen">
       <button
+        ref={mobileMenuTriggerRef}
         type="button"
         aria-label="Abrir menu"
         className="fixed left-4 top-4 z-50 rounded-md border border-clancy-line/80 bg-clancy-surface/90 p-2 text-clancy-ink backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/60 hover:text-clancy-fire hover:shadow-[0_0_14px_rgba(255,46,46,0.25)] md:hidden"
@@ -102,7 +157,7 @@ export default function SecureDashboard() {
               <a
                 key={item.id}
                 href={item.href}
-                className="group flex items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/70 hover:text-clancy-ink hover:shadow-[0_0_16px_rgba(255,46,46,0.22)]"
+                className="group flex items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/70 hover:text-clancy-ink hover:shadow-[0_0_16px_rgba(255,46,46,0.22)] focus-visible:border-clancy-trench focus-visible:text-clancy-ink focus-visible:shadow-[0_0_16px_rgba(252,227,0,0.18)]"
               >
                 <Icon className="h-4 w-4 text-clancy-trench transition-all duration-300 group-hover:text-clancy-fire" />
                 <span>{item.label}</span>
@@ -112,7 +167,7 @@ export default function SecureDashboard() {
         </nav>
         <a
           href="/consola"
-          className="mt-4 flex items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-trench hover:text-clancy-ink hover:shadow-[0_0_16px_rgba(252,227,0,0.28)]"
+          className="mt-4 flex items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-trench hover:text-clancy-ink hover:shadow-[0_0_16px_rgba(252,227,0,0.28)] focus-visible:border-clancy-trench focus-visible:text-clancy-ink focus-visible:shadow-[0_0_16px_rgba(252,227,0,0.18)]"
         >
           <Command className="h-4 w-4 text-clancy-trench transition-all duration-300" />
           <span>Abrir Consola</span>
@@ -131,6 +186,7 @@ export default function SecureDashboard() {
             onClick={() => setMobileMenuOpen(false)}
           />
           <aside
+            ref={mobileMenuRef}
             aria-label="Navegacion movil"
             className="relative h-full w-80 max-w-[88vw] border-r border-clancy-line/80 bg-clancy-surface/92 p-6 backdrop-blur-md"
           >
@@ -139,6 +195,7 @@ export default function SecureDashboard() {
                 Menu Seguro
               </h2>
               <button
+                ref={mobileMenuCloseRef}
                 type="button"
                 className="rounded border border-clancy-line/75 bg-clancy-raised/75 p-1 text-clancy-muted transition-all duration-300 hover:border-clancy-fire/60 hover:text-clancy-fire hover:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
                 onClick={() => setMobileMenuOpen(false)}
@@ -155,7 +212,7 @@ export default function SecureDashboard() {
                     key={item.id}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/70 hover:text-clancy-ink hover:shadow-[0_0_14px_rgba(255,46,46,0.2)]"
+                    className="flex items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/70 hover:text-clancy-ink hover:shadow-[0_0_14px_rgba(255,46,46,0.2)] focus-visible:border-clancy-trench focus-visible:text-clancy-ink focus-visible:shadow-[0_0_14px_rgba(252,227,0,0.18)]"
                   >
                     <Icon className="h-4 w-4 text-clancy-trench transition-all duration-300" />
                     <span>{item.label}</span>
@@ -166,7 +223,7 @@ export default function SecureDashboard() {
             <a
               href="/consola"
               onClick={() => setMobileMenuOpen(false)}
-              className="mt-4 flex w-full items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-trench hover:text-clancy-ink hover:shadow-[0_0_14px_rgba(252,227,0,0.22)]"
+              className="mt-4 flex w-full items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-trench hover:text-clancy-ink hover:shadow-[0_0_14px_rgba(252,227,0,0.22)] focus-visible:border-clancy-trench focus-visible:text-clancy-ink focus-visible:shadow-[0_0_14px_rgba(252,227,0,0.18)]"
             >
               <Command className="h-4 w-4 text-clancy-trench transition-all duration-300" />
               <span>Abrir Consola</span>
@@ -185,7 +242,7 @@ export default function SecureDashboard() {
             <div className="flex items-center gap-2">
               <a
                 href="/smuggler"
-                className="rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-1.5 text-sm text-clancy-muted transition-all duration-300 hover:border-clancy-fire hover:text-clancy-ink hover:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
+                className="rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-1.5 text-sm text-clancy-muted transition-all duration-300 hover:border-clancy-fire hover:text-clancy-ink hover:shadow-[0_0_12px_rgba(255,46,46,0.22)] focus-visible:border-clancy-trench focus-visible:text-clancy-ink focus-visible:shadow-[0_0_12px_rgba(252,227,0,0.18)]"
               >
                 Tienda de Contrabando
               </a>
@@ -282,6 +339,7 @@ export default function SecureDashboard() {
               onClick={() => setTerminalOpen(false)}
             />
             <motion.section
+              ref={terminalDialogRef}
               role="dialog"
               aria-modal="true"
               aria-labelledby="advanced-console-title"
@@ -310,6 +368,7 @@ export default function SecureDashboard() {
                     </span>
                   ) : null}
                   <button
+                    ref={terminalCloseRef}
                     type="button"
                     aria-label="Cerrar consola avanzada"
                     onClick={() => setTerminalOpen(false)}

@@ -143,8 +143,9 @@ export default function BanditoLogin() {
           <input
             id="bandito-email"
             type="email"
-          required
-          disabled={!isSupabaseConfigured}
+            required
+            disabled={!isSupabaseConfigured}
+            autoFocus
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             className="w-full rounded-md border border-zinc-600/60 bg-black/60 px-3 py-2 text-zinc-100 outline-none transition focus:border-clancy-fire/80 focus:shadow-[0_0_12px_rgba(255,46,46,0.22)]"

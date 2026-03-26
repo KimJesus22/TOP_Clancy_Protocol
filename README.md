@@ -117,8 +117,19 @@ The public console is optional and does not block the main navigation.
 - Enlace `Saltar al contenido principal` disponible desde teclado.
 - Landmarks explicitos en la navegacion principal, menu movil y `main`.
 - Estados `focus-visible` para enlaces, botones e inputs.
+- Navegacion lateral, acciones de decodificacion y accesos rapidos compatibles con `Tab` / `Enter`.
+- Los iframes de video muestran señal visual en su contenedor cuando reciben foco por teclado.
+- Los overlays interactivos usan `role="dialog"` y `aria-modal="true"` para mejorar lectura con tecnologias de asistencia.
+- El foco se mueve al primer control util cuando se abre un panel o modal, se mantiene atrapado dentro con `Tab`, permite cierre con `Escape` y regresa al disparador al cerrar.
+- Se incorporo una utilidad local en `src/lib/accessibility.ts` para resolver foco inicial, focus trap y restauracion de foco.
 - Consola demo publica en `/consola` para mostrar la experiencia sin registro.
 - Mejora de contraste con paleta `off-black`, texto suavizado y jerarquia visual por niveles de superficie.
+
+## HTML semantico
+
+- La estructura principal prioriza landmarks nativos como `header`, `nav`, `main`, `section`, `article` y `aside`.
+- Las acciones interactivas usan elementos nativos (`button`, `a`, `input`) en lugar de `div` estilizados como controles.
+- Las vistas de demo y los paneles laterales fueron ajustados para que lectores de pantalla entiendan mejor contexto, titulo y region activa.
 
 ## Variables de entorno adicionales
 

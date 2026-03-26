@@ -46,7 +46,7 @@ export default function BroadcastGallery() {
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/6" />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.04),transparent_34%)] opacity-80" />
           <h3 className="mb-3 font-mono text-lg text-clancy-ink">{broadcast.title}</h3>
-          <div className="overflow-hidden rounded-lg border border-clancy-line/80 shadow-[0_10px_22px_rgba(0,0,0,0.25)] transition-all duration-300 group-hover:border-clancy-fire/70">
+          <div className="overflow-hidden rounded-lg border border-clancy-line/80 shadow-[0_10px_22px_rgba(0,0,0,0.25)] transition-all duration-300 group-hover:border-clancy-fire/70 group-focus-within:border-clancy-trench group-focus-within:shadow-[0_0_0_1px_rgba(252,227,0,0.35),0_10px_22px_rgba(0,0,0,0.25)]">
             <iframe
               title={`Reproductor de YouTube del video oficial ${broadcast.title} de Twenty One Pilots`}
               src={`https://www.youtube.com/embed/${broadcast.youtubeId}?rel=0&modestbranding=1&controls=1&iv_load_policy=3&playsinline=1`}

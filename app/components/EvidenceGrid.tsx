@@ -2,12 +2,13 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   RECOVERED_EVIDENCE,
   RecoveredEvidence,
   EvidenceBadge,
 } from "../data/evidenceGrid";
+import { getFocusableElements, trapFocusInContainer } from "@/src/lib/accessibility";
 
 function badgeStyles(badge: EvidenceBadge) {
   if (badge === "Vulnerable") {
@@ -24,8 +25,35 @@ function badgeStyles(badge: EvidenceBadge) {
 export default function EvidenceGrid() {
   const [selectedEvidence, setSelectedEvidence] =
     useState<RecoveredEvidence | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const dialogRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const evidenceCount = useMemo(() => RECOVERED_EVIDENCE.length, []);
+
+  useEffect(() => {
+    if (!selectedEvidence) {
+      triggerRef.current?.focus();
+      return;
+    }
+
+    const focusableElements = getFocusableElements(dialogRef.current);
+    const firstTarget = closeButtonRef.current ?? focusableElements[0];
+    firstTarget?.focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setSelectedEvidence(null);
+        return;
+      }
+
+      trapFocusInContainer(event, dialogRef.current);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [selectedEvidence]);
 
   return (
     <section className="rounded-xl border border-clancy-line/85 bg-clancy-surface/90 p-6 shadow-[0_10px_30px_rgba(0,0,0,0.28),0_0_20px_rgba(255,46,46,0.12)] backdrop-blur-md">
@@ -53,8 +81,12 @@ export default function EvidenceGrid() {
           return (
             <button
               key={evidence.id}
+              ref={selectedEvidence?.id === evidence.id ? triggerRef : null}
               type="button"
-              onClick={() => setSelectedEvidence(evidence)}
+              onClick={(event) => {
+                triggerRef.current = event.currentTarget;
+                setSelectedEvidence(evidence);
+              }}
               className={`group relative flex h-full flex-col overflow-hidden rounded-lg border border-clancy-line/90 bg-gradient-to-b from-clancy-raised/96 to-clancy-surface/94 p-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_12px_28px_rgba(0,0,0,0.24)] transition-all duration-300 ${hoverGlow}`}
             >
               <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/6" />
@@ -97,6 +129,7 @@ export default function EvidenceGrid() {
               onClick={() => setSelectedEvidence(null)}
             />
             <motion.aside
+              ref={dialogRef}
               role="dialog"
               aria-modal="true"
               aria-labelledby="evidence-panel-title"
@@ -122,6 +155,7 @@ export default function EvidenceGrid() {
                   </p>
                 </div>
                 <button
+                  ref={closeButtonRef}
                   type="button"
                   aria-label="Cerrar panel"
                   onClick={() => setSelectedEvidence(null)}

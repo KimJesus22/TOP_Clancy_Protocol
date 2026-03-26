@@ -1,16 +1,44 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   DIGITAL_EVIDENCE_LOCKER,
   EvidenceRecord,
 } from "../data/digitalEvidenceLocker";
+import { getFocusableElements, trapFocusInContainer } from "@/src/lib/accessibility";
 
 export default function DigitalEvidenceLocker() {
   const [activeEvidence, setActiveEvidence] = useState<EvidenceRecord | null>(
     null,
   );
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const dialogRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    if (!activeEvidence) {
+      triggerRef.current?.focus();
+      return;
+    }
+
+    const focusableElements = getFocusableElements(dialogRef.current);
+    const firstTarget = closeButtonRef.current ?? focusableElements[0];
+    firstTarget?.focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setActiveEvidence(null);
+        return;
+      }
+
+      trapFocusInContainer(event, dialogRef.current);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [activeEvidence]);
 
   return (
     <section className="w-full">
@@ -34,7 +62,10 @@ export default function DigitalEvidenceLocker() {
             <button
               key={evidence.id}
               type="button"
-              onClick={() => setActiveEvidence(evidence)}
+              onClick={(event) => {
+                triggerRef.current = event.currentTarget;
+                setActiveEvidence(evidence);
+              }}
               className="group relative rounded-md border border-clancy-fire/50 bg-black/35 p-4 text-left transition-all duration-300 hover:border-clancy-fire hover:shadow-[0_0_24px_rgba(255,46,46,0.35)]"
             >
               <div className="absolute -top-2 left-3 h-3 w-20 rounded-sm border border-clancy-fire/40 bg-black/80" />
@@ -63,6 +94,7 @@ export default function DigitalEvidenceLocker() {
             onClick={() => setActiveEvidence(null)}
           >
             <motion.article
+              ref={dialogRef}
               role="dialog"
               aria-modal="true"
               aria-labelledby="digital-evidence-title"
@@ -89,6 +121,7 @@ export default function DigitalEvidenceLocker() {
                   </p>
                 </div>
                 <button
+                  ref={closeButtonRef}
                   type="button"
                   className="rounded border border-clancy-fire/60 px-2 py-1 text-xs text-clancy-fire transition hover:shadow-[0_0_14px_rgba(255,46,46,0.35)]"
                   onClick={() => setActiveEvidence(null)}

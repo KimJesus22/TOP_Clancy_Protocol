@@ -52,10 +52,11 @@ export default function DecodeChallenge() {
           onChange={(event) => setCode(event.target.value)}
           className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2 text-white outline-none transition-all duration-300 placeholder:text-gray-400 focus:border-clancy-fire/70 focus:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
           placeholder="Ej: SAHLOFOLINA"
+          aria-label="Codigo secreto para decodificar"
         />
         <button
           type="submit"
-          className="rounded-md border border-white/10 bg-black/30 px-4 py-2 font-mono text-sm text-gray-300 transition-all duration-300 hover:border-clancy-trench hover:text-white hover:shadow-[0_0_14px_rgba(252,227,0,0.25)]"
+          className="rounded-md border border-white/10 bg-black/30 px-4 py-2 font-mono text-sm text-gray-300 transition-all duration-300 hover:border-clancy-trench hover:text-white hover:shadow-[0_0_14px_rgba(252,227,0,0.25)] focus-visible:border-clancy-trench focus-visible:text-white focus-visible:shadow-[0_0_14px_rgba(252,227,0,0.2)]"
         >
           Decodificar
         </button>
