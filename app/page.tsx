@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SecureDashboard from "./components/SecureDashboard";
 import { buildPageMetadata } from "@/src/lib/metadata";
+import { buildHomeStructuredData, jsonLdScriptProps } from "@/src/lib/structured-data";
 
 export const dynamic = "force-static";
 export const revalidate = 3600;
@@ -20,5 +21,18 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function Home() {
-  return <SecureDashboard />;
+  const structuredData = buildHomeStructuredData();
+
+  return (
+    <>
+      {structuredData.map((schema, index) => (
+        <script
+          key={`home-structured-data-${index}`}
+          id={`structured-data-home-${index}`}
+          {...jsonLdScriptProps(schema)}
+        />
+      ))}
+      <SecureDashboard />
+    </>
+  );
 }
