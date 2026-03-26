@@ -123,6 +123,13 @@ The public console is optional and does not block the main navigation.
 - No se fuerza `priority` donde no existe una imagen LCP clara above-the-fold; los fondos principales son gradientes CSS y no archivos raster.
 - Los fondos visuales decorativos actuales se resuelven con CSS (`linear-gradient` / `radial-gradient`), por lo que no aplica migrarlos a `next/image`.
 
+## Carga de fuentes
+
+- Las fuentes se gestionan con `next/font/google`, por lo que Next.js las auto-hospeda dentro del flujo de build.
+- Se usa `display: "swap"` para evitar bloqueo de render mientras cargan las fuentes personalizadas.
+- Las fuentes secundarias `Noto Sans KR` y `Noto Sans JP` deshabilitan `preload` para no competir con la ruta critica de la home.
+- La prioridad de carga queda concentrada en las familias base de interfaz (`Inter` y `Fira Code`).
+
 ## Lore PDF Integration
 
 - El contenido del PDF `WELCOME TO TRENCH` fue convertido a experiencia web bilingue dentro de la home.

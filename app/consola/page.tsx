@@ -2,6 +2,9 @@ import Link from "next/link";
 import { ArrowLeft, Command, LogIn, ShieldAlert } from "lucide-react";
 import TerminalInterface from "../components/TerminalInterface";
 
+export const dynamic = "force-static";
+export const revalidate = 3600;
+
 const samplePrompts = [
   "help",
   "status",
