@@ -39,15 +39,15 @@ const conflictMarkers = [
 
 export default function ActClancyBriefing() {
   return (
-    <section className="rounded-xl border border-white/10 bg-black/40 p-6 shadow-[0_0_24px_rgba(252,227,0,0.12)] backdrop-blur-md">
+    <section className="rounded-xl border border-clancy-line/80 bg-clancy-surface/88 p-6 shadow-[0_0_24px_rgba(252,227,0,0.12)] backdrop-blur-md">
       <header className="max-w-4xl">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
           Act Clancy Era
         </p>
-        <h2 className="mt-2 font-mono text-2xl tracking-[0.08em] text-white sm:text-3xl">
+        <h2 className="mt-2 font-mono text-2xl tracking-[0.08em] text-clancy-ink sm:text-3xl">
           Briefing del PDF Integrado
         </h2>
-        <p className="mt-3 text-sm text-zinc-300 sm:text-base">
+        <p className="mt-3 text-sm text-clancy-muted sm:text-base">
           Conversion bilingue del dossier `WELCOME TO TRENCH` a formato web.
           La lectura prioriza cronologia, personajes, ciudades y el paso de
           supervivencia a contraofensiva dentro de DEMA.
@@ -58,18 +58,18 @@ export default function ActClancyBriefing() {
         {briefingCards.map((card) => (
           <article
             key={card.title}
-            className={`rounded-lg border bg-black/35 p-4 ${card.border}`}
+            className={`rounded-lg border bg-clancy-raised/72 p-4 ${card.border}`}
           >
             <h3 className={`font-mono text-lg ${card.accent}`}>{card.title}</h3>
-            <p className="mt-3 text-sm text-zinc-100">{card.summaryEs}</p>
-            <p className="mt-3 border-t border-white/10 pt-3 text-sm text-zinc-400">
+            <p className="mt-3 text-sm text-clancy-ink">{card.summaryEs}</p>
+            <p className="mt-3 border-t border-clancy-line/70 pt-3 text-sm text-clancy-muted">
               {card.summaryEn}
             </p>
           </article>
         ))}
       </div>
 
-      <div className="mt-6 rounded-lg border border-white/10 bg-black/35 p-4">
+      <div className="mt-6 rounded-lg border border-clancy-line/75 bg-clancy-raised/72 p-4">
         <p className="font-mono text-xs uppercase tracking-[0.18em] text-clancy-trench">
           Conflict Trace
         </p>
@@ -77,12 +77,12 @@ export default function ActClancyBriefing() {
           {conflictMarkers.map((marker, index) => (
             <div
               key={marker}
-              className="rounded-md border border-white/10 bg-black/30 p-3"
+              className="rounded-md border border-clancy-line/75 bg-clancy-surface/80 p-3"
             >
               <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-zinc-500">
                 Fase 0{index + 1}
               </p>
-              <p className="mt-2 text-sm text-zinc-200">{marker}</p>
+              <p className="mt-2 text-sm text-clancy-ink">{marker}</p>
             </div>
           ))}
         </div>

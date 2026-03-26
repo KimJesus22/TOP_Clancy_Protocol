@@ -11,7 +11,13 @@ const config: Config = {
     extend: {
       colors: {
         clancy: {
-          black: "#0a0a0a",
+          black: "#121418",
+          canvas: "#121418",
+          surface: "#191d24",
+          raised: "#202631",
+          line: "#353d4a",
+          ink: "#f2ede3",
+          muted: "#cbc4b8",
           fire: "#ff2e2e",
           trench: "#fce300",
         },

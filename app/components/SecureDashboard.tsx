@@ -73,17 +73,17 @@ export default function SecureDashboard() {
       <button
         type="button"
         aria-label="Abrir menu"
-        className="fixed left-4 top-4 z-50 rounded-md border border-white/10 bg-black/40 p-2 text-white backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/60 hover:text-clancy-fire hover:shadow-[0_0_14px_rgba(255,46,46,0.25)] md:hidden"
+        className="fixed left-4 top-4 z-50 rounded-md border border-clancy-line/80 bg-clancy-surface/90 p-2 text-clancy-ink backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/60 hover:text-clancy-fire hover:shadow-[0_0_14px_rgba(255,46,46,0.25)] md:hidden"
         onClick={() => setMobileMenuOpen(true)}
       >
         <Menu className="h-5 w-5" />
       </button>
 
-      <aside className="fixed inset-y-0 left-0 hidden w-72 border-r border-white/10 bg-black/40 p-6 backdrop-blur-md md:flex md:flex-col">
+      <aside className="fixed inset-y-0 left-0 hidden w-72 border-r border-clancy-line/80 bg-clancy-surface/88 p-6 backdrop-blur-md md:flex md:flex-col">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
           Secure Panel
         </p>
-        <h1 className="mt-2 font-mono text-xl tracking-[0.08em] text-white">
+        <h1 className="mt-2 font-mono text-xl tracking-[0.08em] text-clancy-ink">
           Clancy Dashboard
         </h1>
         <nav className="mt-8 space-y-2">
@@ -93,7 +93,7 @@ export default function SecureDashboard() {
               <a
                 key={item.id}
                 href={item.href}
-                className="group flex items-center gap-3 rounded-md border border-white/10 bg-black/30 px-3 py-2 text-sm text-gray-300 backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/70 hover:text-white hover:shadow-[0_0_16px_rgba(255,46,46,0.22)]"
+                className="group flex items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/70 hover:text-clancy-ink hover:shadow-[0_0_16px_rgba(255,46,46,0.22)]"
               >
                 <Icon className="h-4 w-4 text-clancy-trench transition-all duration-300 group-hover:text-clancy-fire" />
                 <span>{item.label}</span>
@@ -104,7 +104,7 @@ export default function SecureDashboard() {
         <button
           type="button"
           onClick={() => setTerminalOpen(true)}
-          className="mt-4 flex items-center gap-3 rounded-md border border-white/10 bg-black/30 px-3 py-2 text-sm text-gray-300 backdrop-blur-md transition-all duration-300 hover:border-clancy-trench hover:text-white hover:shadow-[0_0_16px_rgba(252,227,0,0.28)]"
+          className="mt-4 flex items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-trench hover:text-clancy-ink hover:shadow-[0_0_16px_rgba(252,227,0,0.28)]"
         >
           <Command className="h-4 w-4 text-clancy-trench transition-all duration-300" />
           <span>Abrir Consola</span>
@@ -118,18 +118,18 @@ export default function SecureDashboard() {
         <div className="fixed inset-0 z-50 md:hidden">
           <button
             type="button"
-            className="absolute inset-0 bg-black/80"
+            className="absolute inset-0 bg-[#101317]/86"
             aria-label="Cerrar menu"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <aside className="relative h-full w-80 max-w-[88vw] border-r border-white/10 bg-black/40 p-6 backdrop-blur-md">
+          <aside className="relative h-full w-80 max-w-[88vw] border-r border-clancy-line/80 bg-clancy-surface/92 p-6 backdrop-blur-md">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="font-mono text-lg tracking-[0.08em] text-white">
+              <h2 className="font-mono text-lg tracking-[0.08em] text-clancy-ink">
                 Menu Seguro
               </h2>
               <button
                 type="button"
-                className="rounded border border-white/10 bg-black/30 p-1 text-gray-300 transition-all duration-300 hover:border-clancy-fire/60 hover:text-clancy-fire hover:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
+                className="rounded border border-clancy-line/75 bg-clancy-raised/75 p-1 text-clancy-muted transition-all duration-300 hover:border-clancy-fire/60 hover:text-clancy-fire hover:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
                 onClick={() => setMobileMenuOpen(false)}
                 aria-label="Cerrar menu lateral"
               >
@@ -144,7 +144,7 @@ export default function SecureDashboard() {
                     key={item.id}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-md border border-white/10 bg-black/30 px-3 py-2 text-sm text-gray-300 backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/70 hover:text-white hover:shadow-[0_0_14px_rgba(255,46,46,0.2)]"
+                    className="flex items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/70 hover:text-clancy-ink hover:shadow-[0_0_14px_rgba(255,46,46,0.2)]"
                   >
                     <Icon className="h-4 w-4 text-clancy-trench transition-all duration-300" />
                     <span>{item.label}</span>
@@ -158,7 +158,7 @@ export default function SecureDashboard() {
                 setMobileMenuOpen(false);
                 setTerminalOpen(true);
               }}
-              className="mt-4 flex w-full items-center gap-3 rounded-md border border-white/10 bg-black/30 px-3 py-2 text-sm text-gray-300 backdrop-blur-md transition-all duration-300 hover:border-clancy-trench hover:text-white hover:shadow-[0_0_14px_rgba(252,227,0,0.22)]"
+              className="mt-4 flex w-full items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-trench hover:text-clancy-ink hover:shadow-[0_0_14px_rgba(252,227,0,0.22)]"
             >
               <Command className="h-4 w-4 text-clancy-trench transition-all duration-300" />
               <span>Abrir Consola</span>
@@ -172,12 +172,12 @@ export default function SecureDashboard() {
 
       <main className="md:pl-72">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-4 pt-20 sm:p-6 sm:pt-24 md:p-10 md:pt-10">
-          <header className="sticky top-3 z-30 flex items-center justify-between rounded-xl border border-white/10 bg-black/40 px-4 py-3 backdrop-blur-md">
-            <p className="font-mono text-sm text-white">Operacion Trench Wallet</p>
+          <header className="sticky top-3 z-30 flex items-center justify-between rounded-xl border border-clancy-line/80 bg-clancy-surface/88 px-4 py-3 backdrop-blur-md">
+            <p className="font-mono text-sm text-clancy-ink">Operacion Trench Wallet</p>
             <div className="flex items-center gap-2">
               <a
                 href="/smuggler"
-                className="rounded-md border border-white/10 bg-black/30 px-3 py-1.5 text-sm text-gray-300 transition-all duration-300 hover:border-clancy-fire hover:text-white hover:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
+                className="rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-1.5 text-sm text-clancy-muted transition-all duration-300 hover:border-clancy-fire hover:text-clancy-ink hover:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
               >
                 Tienda de Contrabando
               </a>
@@ -187,30 +187,30 @@ export default function SecureDashboard() {
 
           <section
             id="inicio"
-            className="rounded-xl border border-white/10 bg-black/40 p-6 shadow-[0_0_24px_rgba(255,46,46,0.16)] backdrop-blur-md"
+            className="rounded-xl border border-clancy-line/80 bg-clancy-surface/88 p-6 shadow-[0_0_24px_rgba(255,46,46,0.16)] backdrop-blur-md"
           >
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
               Inicio
             </p>
-            <h2 className="mt-2 font-mono text-2xl tracking-[0.08em] text-white sm:text-3xl">
+            <h2 className="mt-2 font-mono text-2xl tracking-[0.08em] text-clancy-ink sm:text-3xl">
               Panel de Control Seguro
             </h2>
-            <p className="mt-3 max-w-3xl text-sm text-gray-300 sm:text-base">
+            <p className="mt-3 max-w-3xl text-sm text-clancy-muted sm:text-base">
               Interfaz visual para monitorear expedientes, trafico de red y
               acceso terminal, pensada para usuarios no tecnicos sin perder
               estetica Cyberpunk/Clancy.
             </p>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              <article className="rounded-md border border-white/10 bg-black/40 p-3 backdrop-blur-md">
-                <p className="text-xs text-gray-300">Alertas activas</p>
+              <article className="rounded-md border border-clancy-line/75 bg-clancy-raised/72 p-3 backdrop-blur-md">
+                <p className="text-xs text-clancy-muted">Alertas activas</p>
                 <p className="mt-1 font-mono text-2xl text-clancy-fire">03</p>
               </article>
-              <article className="rounded-md border border-white/10 bg-black/40 p-3 backdrop-blur-md">
-                <p className="text-xs text-gray-300">Expedientes auditados</p>
+              <article className="rounded-md border border-clancy-line/75 bg-clancy-raised/72 p-3 backdrop-blur-md">
+                <p className="text-xs text-clancy-muted">Expedientes auditados</p>
                 <p className="mt-1 font-mono text-2xl text-clancy-fire">08</p>
               </article>
-              <article className="rounded-md border border-white/10 bg-black/40 p-3 backdrop-blur-md">
-                <p className="text-xs text-gray-300">Riesgo DEMA</p>
+              <article className="rounded-md border border-clancy-line/75 bg-clancy-raised/72 p-3 backdrop-blur-md">
+                <p className="text-xs text-clancy-muted">Riesgo DEMA</p>
                 <p className="mt-1 font-mono text-2xl text-clancy-trench">78%</p>
               </article>
             </div>
@@ -247,11 +247,11 @@ export default function SecureDashboard() {
             <LoreDecryptor />
           </section>
 
-          <section className="scroll-mt-24 rounded-xl border border-white/10 bg-black/40 p-6 backdrop-blur-md">
-            <h2 className="font-mono text-2xl tracking-[0.08em] text-white">
+          <section className="scroll-mt-24 rounded-xl border border-clancy-line/80 bg-clancy-surface/88 p-6 backdrop-blur-md">
+            <h2 className="font-mono text-2xl tracking-[0.08em] text-clancy-ink">
               Transmisiones Interceptadas de DEMA
             </h2>
-            <p className="mt-3 text-sm text-gray-300">
+            <p className="mt-3 text-sm text-clancy-muted">
               Archivo publico de videos oficiales del lore para seguimiento no tecnico.
             </p>
             <div className="mt-5">
@@ -267,7 +267,7 @@ export default function SecureDashboard() {
             <motion.button
               type="button"
               aria-label="Cerrar consola"
-              className="fixed inset-0 z-50 bg-black/75"
+              className="fixed inset-0 z-50 bg-[#101317]/84"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -280,7 +280,7 @@ export default function SecureDashboard() {
               exit={{ opacity: 0, y: 18, scale: 0.98 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
             >
-              <div className="mb-3 flex items-center justify-between rounded-md border border-white/10 bg-black/40 px-3 py-2 backdrop-blur-md">
+              <div className="mb-3 flex items-center justify-between rounded-md border border-clancy-line/80 bg-clancy-surface/90 px-3 py-2 backdrop-blur-md">
                 <div>
                   <p className="font-mono text-xs uppercase tracking-[0.15em] text-clancy-trench">
                     Consola Avanzada
@@ -299,7 +299,7 @@ export default function SecureDashboard() {
                     type="button"
                     aria-label="Cerrar consola avanzada"
                     onClick={() => setTerminalOpen(false)}
-                    className="rounded border border-white/10 bg-black/30 p-1 text-gray-300 transition-all duration-300 hover:border-clancy-fire/60 hover:text-clancy-fire hover:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
+                    className="rounded border border-clancy-line/75 bg-clancy-raised/75 p-1 text-clancy-muted transition-all duration-300 hover:border-clancy-fire/60 hover:text-clancy-fire hover:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
                   >
                     <X className="h-4 w-4" />
                   </button>

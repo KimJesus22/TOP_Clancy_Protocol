@@ -94,15 +94,15 @@ export default function ChronologicalEvidence() {
   }, [spotifyAlbumIds]);
 
   return (
-    <section className="scroll-mt-24 rounded-xl border border-white/10 bg-black/40 p-6 shadow-[0_0_20px_rgba(255,46,46,0.14)] backdrop-blur-md">
+    <section className="scroll-mt-24 rounded-xl border border-clancy-line/80 bg-clancy-surface/88 p-6 shadow-[0_0_20px_rgba(255,46,46,0.14)] backdrop-blur-md">
       <header className="mb-6">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
           Chronological Evidence
         </p>
-        <h2 className="mt-2 font-mono text-2xl tracking-[0.08em] text-white">
+        <h2 className="mt-2 font-mono text-2xl tracking-[0.08em] text-clancy-ink">
           Timeline de Albumes
         </h2>
-        <p className="mt-3 max-w-3xl text-sm text-gray-300">
+        <p className="mt-3 max-w-3xl text-sm text-clancy-muted">
           Registro cronologico convertido desde el PDF en un dossier bilingue de
           eras, ciclos, personajes y puntos de ruptura contra DEMA.
         </p>
@@ -124,14 +124,14 @@ export default function ChronologicalEvidence() {
             <motion.li
               key={album.id}
               variants={itemVariants}
-              className="relative rounded-lg border border-zinc-700/70 bg-black/40 p-4"
+              className="relative rounded-lg border border-clancy-line/80 bg-clancy-raised/72 p-4"
               style={{
                 borderColor: `${album.coverColor}88`,
                 boxShadow: `0 0 0px ${album.coverColor}00`,
               }}
             >
               <span
-                className="absolute -left-[33px] top-5 h-4 w-4 rounded-full border-2 bg-black"
+                className="absolute -left-[33px] top-5 h-4 w-4 rounded-full border-2 bg-clancy-canvas"
                 style={{
                   borderColor: album.coverColor,
                   boxShadow: `0 0 12px ${album.coverColor}`,
@@ -147,7 +147,7 @@ export default function ChronologicalEvidence() {
               >
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <h3 className="font-mono text-lg text-zinc-100">{album.title}</h3>
+                    <h3 className="font-mono text-lg text-clancy-ink">{album.title}</h3>
                     <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.14em] text-zinc-500">
                       PDF coverage: {album.sourceCoverage}
                     </p>
@@ -167,11 +167,11 @@ export default function ChronologicalEvidence() {
                 <div className="mt-3 grid gap-2 text-sm sm:grid-cols-3">
                   <p className="text-zinc-300">
                     Ano:{" "}
-                    <span className="font-mono text-zinc-100">{album.releaseYear}</span>
+                    <span className="font-mono text-clancy-ink">{album.releaseYear}</span>
                   </p>
                   <p className="text-zinc-300">
                     Amenaza DEMA:{" "}
-                    <span className="font-mono text-zinc-100">
+                      <span className="font-mono text-clancy-ink">
                       {album.demaThreatLevel}/10
                     </span>
                   </p>
@@ -194,31 +194,31 @@ export default function ChronologicalEvidence() {
               >
                 <div className="mt-4 space-y-4">
                   {hasSpotifyMetadata ? (
-                    <article className="grid gap-4 rounded-md border border-zinc-700/70 bg-black/60 p-4 md:grid-cols-[96px_1fr]">
+                    <article className="grid gap-4 rounded-md border border-clancy-line/80 bg-clancy-surface/82 p-4 md:grid-cols-[96px_1fr]">
                       {spotifyAlbum.imageUrl ? (
                         <Image
                           src={spotifyAlbum.imageUrl}
                           alt={`Cover art for ${spotifyAlbum.name}`}
                           width={96}
                           height={96}
-                          className="h-24 w-24 rounded-md border border-white/10 object-cover"
+                          className="h-24 w-24 rounded-md border border-clancy-line/70 object-cover"
                         />
                       ) : null}
                       <div>
                         <p className="font-mono text-xs uppercase tracking-[0.12em] text-clancy-trench">
                           Spotify Metadata
                         </p>
-                        <h4 className="mt-2 font-mono text-base text-white">
+                          <h4 className="mt-2 font-mono text-base text-clancy-ink">
                           {spotifyAlbum.name}
                         </h4>
-                        <p className="mt-1 text-sm text-zinc-300">
+                        <p className="mt-1 text-sm text-clancy-muted">
                           {spotifyAlbum.artists.join(", ")}
                         </p>
                         <div className="mt-3 flex flex-wrap gap-2 text-xs text-zinc-400">
-                          <span className="rounded-full border border-white/10 px-2 py-1">
+                          <span className="rounded-full border border-clancy-line/70 px-2 py-1">
                             Release: {spotifyAlbum.releaseDate}
                           </span>
-                          <span className="rounded-full border border-white/10 px-2 py-1">
+                          <span className="rounded-full border border-clancy-line/70 px-2 py-1">
                             Tracks: {spotifyAlbum.totalTracks}
                           </span>
                           {spotifyAlbum.spotifyUrl ? (
@@ -235,11 +235,11 @@ export default function ChronologicalEvidence() {
                       </div>
                     </article>
                   ) : spotifyError && shouldResolveSpotify ? (
-                    <article className="rounded-md border border-clancy-fire/30 bg-black/60 p-4">
+                    <article className="rounded-md border border-clancy-fire/30 bg-clancy-surface/82 p-4">
                       <p className="font-mono text-xs uppercase tracking-[0.12em] text-clancy-fire">
                         Spotify Metadata
                       </p>
-                      <p className="mt-2 text-sm text-zinc-300">
+                        <p className="mt-2 text-sm text-clancy-muted">
                         No se pudo cargar metadata en tiempo real. El embed sigue
                         disponible.
                       </p>
@@ -247,23 +247,23 @@ export default function ChronologicalEvidence() {
                   ) : null}
 
                   <div className="grid gap-4 lg:grid-cols-2">
-                    <article className="rounded-md border border-zinc-700/70 bg-black/60 p-4">
+                    <article className="rounded-md border border-clancy-line/80 bg-clancy-surface/82 p-4">
                       <p className="font-mono text-xs uppercase tracking-[0.12em] text-clancy-trench">
                         Resumen ES
                       </p>
-                      <p className="mt-3 text-sm text-zinc-200">{album.summary.es}</p>
+                      <p className="mt-3 text-sm text-clancy-ink">{album.summary.es}</p>
                     </article>
 
-                    <article className="rounded-md border border-zinc-700/70 bg-black/60 p-4">
+                    <article className="rounded-md border border-clancy-line/80 bg-clancy-surface/82 p-4">
                       <p className="font-mono text-xs uppercase tracking-[0.12em] text-clancy-fire">
                         Summary EN
                       </p>
-                      <p className="mt-3 text-sm text-zinc-300">{album.summary.en}</p>
+                      <p className="mt-3 text-sm text-clancy-muted">{album.summary.en}</p>
                     </article>
                   </div>
 
                   <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-                    <article className="rounded-md border border-zinc-700/70 bg-black/60 p-4">
+                    <article className="rounded-md border border-clancy-line/80 bg-clancy-surface/82 p-4">
                       <p className="font-mono text-xs uppercase tracking-[0.12em] text-clancy-trench">
                         Key Moments
                       </p>
@@ -271,17 +271,17 @@ export default function ChronologicalEvidence() {
                         {album.keyMoments.map((moment) => (
                           <div
                             key={`${album.id}-${moment.es}`}
-                            className="rounded-md border border-white/10 bg-black/40 p-3"
+                            className="rounded-md border border-clancy-line/70 bg-clancy-raised/70 p-3"
                           >
-                            <p className="text-sm text-zinc-100">{moment.es}</p>
-                            <p className="mt-2 text-sm text-zinc-400">{moment.en}</p>
+                            <p className="text-sm text-clancy-ink">{moment.es}</p>
+                            <p className="mt-2 text-sm text-clancy-muted">{moment.en}</p>
                           </div>
                         ))}
                       </div>
                     </article>
 
                     <div className="space-y-4">
-                      <article className="rounded-md border border-zinc-700/70 bg-black/60 p-4">
+                      <article className="rounded-md border border-clancy-line/80 bg-clancy-surface/82 p-4">
                         <p className="font-mono text-xs uppercase tracking-[0.12em] text-clancy-fire">
                           Linked Entities
                         </p>
@@ -289,7 +289,7 @@ export default function ChronologicalEvidence() {
                           {album.linkedEntities.map((entity) => (
                             <span
                               key={`${album.id}-${entity}`}
-                              className="rounded-full border border-white/10 bg-black/50 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.08em] text-zinc-300"
+                                className="rounded-full border border-clancy-line/70 bg-clancy-raised/72 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.08em] text-clancy-muted"
                             >
                               {entity}
                             </span>
@@ -297,7 +297,7 @@ export default function ChronologicalEvidence() {
                         </div>
                       </article>
 
-                      <article className="rounded-md border border-zinc-700/70 bg-black/60 p-4">
+                      <article className="rounded-md border border-clancy-line/80 bg-clancy-surface/82 p-4">
                         <p className="font-mono text-xs uppercase tracking-[0.12em] text-clancy-trench">
                           Lore Signals
                         </p>
@@ -305,10 +305,10 @@ export default function ChronologicalEvidence() {
                           {album.loreSignals.map((signal) => (
                             <div
                               key={`${album.id}-${signal.es}`}
-                              className="rounded-md border border-white/10 bg-black/40 p-3"
+                                className="rounded-md border border-clancy-line/70 bg-clancy-raised/70 p-3"
                             >
-                              <p className="text-sm text-zinc-200">{signal.es}</p>
-                              <p className="mt-2 text-sm text-zinc-400">{signal.en}</p>
+                              <p className="text-sm text-clancy-ink">{signal.es}</p>
+                              <p className="mt-2 text-sm text-clancy-muted">{signal.en}</p>
                             </div>
                           ))}
                         </div>
@@ -316,12 +316,12 @@ export default function ChronologicalEvidence() {
                     </div>
                   </div>
 
-                  <div className="rounded-md border border-zinc-700/70 bg-black/60 p-3">
+                  <div className="rounded-md border border-clancy-line/80 bg-clancy-surface/82 p-3">
                     <p className="mb-2 font-mono text-xs uppercase tracking-[0.12em] text-clancy-trench">
                       Spotify Relay
                     </p>
                     <div
-                      className={`rounded-md border border-zinc-700/70 bg-black p-1 transition ${
+                      className={`rounded-md border border-clancy-line/75 bg-clancy-canvas p-1 transition ${
                         expandedAlbumId === album.id
                           ? "opacity-100 saturate-100"
                           : "opacity-60 saturate-50"
