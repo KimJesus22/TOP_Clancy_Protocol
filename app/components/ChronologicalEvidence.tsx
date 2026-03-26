@@ -198,7 +198,7 @@ export default function ChronologicalEvidence() {
                       {spotifyAlbum.imageUrl ? (
                         <Image
                           src={spotifyAlbum.imageUrl}
-                          alt={`Cover art for ${spotifyAlbum.name}`}
+                          alt={`Portada del album ${spotifyAlbum.name} de ${spotifyAlbum.artists.join(", ")}`}
                           width={96}
                           height={96}
                           className="h-24 w-24 rounded-md border border-clancy-line/70 object-cover"
@@ -328,7 +328,7 @@ export default function ChronologicalEvidence() {
                       }`}
                     >
                       <iframe
-                        title={`Spotify player for ${album.title}`}
+                        title={`Reproductor embebido de Spotify para el album ${album.title}`}
                         src={`https://open.spotify.com/embed/album/${album.spotifyEmbedId}?utm_source=generator`}
                         width="100%"
                         height="152"

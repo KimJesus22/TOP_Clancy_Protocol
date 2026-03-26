@@ -97,6 +97,9 @@ export default function EvidenceGrid() {
               onClick={() => setSelectedEvidence(null)}
             />
             <motion.aside
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="evidence-panel-title"
               className="fixed right-0 top-0 z-50 h-full w-full max-w-2xl overflow-y-auto border-l border-clancy-fire/45 bg-clancy-canvas p-6 shadow-[-8px_0_24px_rgba(0,0,0,0.55)]"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
@@ -108,7 +111,10 @@ export default function EvidenceGrid() {
                   <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
                     Panel Lateral Derecho
                   </p>
-                  <h3 className="mt-2 font-mono text-2xl text-clancy-fire">
+                  <h3
+                    id="evidence-panel-title"
+                    className="mt-2 font-mono text-2xl text-clancy-fire"
+                  >
                     {selectedEvidence.title}
                   </h3>
                   <p className="mt-1 font-mono text-xs text-clancy-muted">

@@ -48,7 +48,7 @@ export default function BroadcastGallery() {
           <h3 className="mb-3 font-mono text-lg text-clancy-ink">{broadcast.title}</h3>
           <div className="overflow-hidden rounded-lg border border-clancy-line/80 shadow-[0_10px_22px_rgba(0,0,0,0.25)] transition-all duration-300 group-hover:border-clancy-fire/70">
             <iframe
-              title={`${broadcast.title} official video`}
+              title={`Reproductor de YouTube del video oficial ${broadcast.title} de Twenty One Pilots`}
               src={`https://www.youtube.com/embed/${broadcast.youtubeId}?rel=0&modestbranding=1&controls=1&iv_load_policy=3&playsinline=1`}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"

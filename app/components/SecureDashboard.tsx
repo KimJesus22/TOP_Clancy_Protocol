@@ -282,6 +282,9 @@ export default function SecureDashboard() {
               onClick={() => setTerminalOpen(false)}
             />
             <motion.section
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="advanced-console-title"
               className="fixed left-1/2 top-1/2 z-[60] w-[92vw] max-w-3xl -translate-x-1/2 -translate-y-1/2"
               initial={{ opacity: 0, y: 18, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -293,7 +296,10 @@ export default function SecureDashboard() {
                   <p className="font-mono text-xs uppercase tracking-[0.15em] text-clancy-trench">
                     Consola Avanzada
                   </p>
-                  <p className="text-xs text-gray-300">
+                  <p
+                    id="advanced-console-title"
+                    className="text-xs text-gray-300"
+                  >
                     Extra opcional para usuarios avanzados
                   </p>
                 </div>

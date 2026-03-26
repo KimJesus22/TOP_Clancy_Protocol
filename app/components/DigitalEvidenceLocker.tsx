@@ -63,6 +63,9 @@ export default function DigitalEvidenceLocker() {
             onClick={() => setActiveEvidence(null)}
           >
             <motion.article
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="digital-evidence-title"
               className="w-full max-w-2xl rounded-md border border-clancy-fire bg-[#0f0f0f] p-5 shadow-[0_0_28px_rgba(255,46,46,0.4)]"
               initial={{ opacity: 0, y: 16, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -75,7 +78,10 @@ export default function DigitalEvidenceLocker() {
                   <p className="text-xs uppercase tracking-[0.16em] text-clancy-trench/90">
                     {activeEvidence.classification}
                   </p>
-                  <h3 className="mt-1 font-mono text-xl tracking-[0.1em] text-clancy-fire">
+                  <h3
+                    id="digital-evidence-title"
+                    className="mt-1 font-mono text-xl tracking-[0.1em] text-clancy-fire"
+                  >
                     {activeEvidence.title}
                   </h3>
                   <p className="mt-2 text-sm text-zinc-200">

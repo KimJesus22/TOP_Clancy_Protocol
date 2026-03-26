@@ -166,7 +166,7 @@ ${AVAILABLE_COMMANDS.join("\n")}`);
           </p>
           <Image
             src="/hidden-vialism.svg"
-            alt="Vialism hidden signal"
+            alt="Ilustracion del archivo oculto Vialism desbloqueado desde la consola"
             width={640}
             height={320}
             className="h-auto w-full rounded border border-clancy-fire/40"
