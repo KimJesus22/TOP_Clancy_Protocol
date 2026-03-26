@@ -39,6 +39,12 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${firaCode.variable} ${notoSansKr.variable} ${notoSansJp.variable}`}
       >
+        <a
+          href="#main-content"
+          className="skip-link"
+        >
+          Saltar al contenido principal
+        </a>
         <ThemeApplier />
         {children}
         <DemaRadioPlayer />

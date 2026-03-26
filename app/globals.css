@@ -15,6 +15,37 @@ html {
   scroll-behavior: smooth;
 }
 
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 999;
+  border: 1px solid rgba(252, 227, 0, 0.6);
+  background: rgba(25, 29, 36, 0.96);
+  color: #f2ede3;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-family: var(--font-fira-code), Courier New, Courier, monospace;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  transform: translateY(-140%);
+  transition: transform 0.18s ease-out;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid rgba(252, 227, 0, 0.9);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(252, 227, 0, 0.14);
+}
+
 body[data-theme="blurryface"] * {
   border-color: rgba(255, 46, 46, 0.65) !important;
 }

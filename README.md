@@ -33,6 +33,7 @@ It also includes hidden tools for technical users, such as an advanced console w
 - Trench Wallet (economia virtual) con codigos secretos y tienda de contrabando.
 - Reproductor global persistente "Dema Radio Player" con estado compartido.
 - Modulo EdTech `/learn` con motor interactivo `LyricQuizEngine`.
+- Demo publica `/consola` para mostrar la terminal sin autenticacion.
 - Endpoint publico `/login` para solicitar Magic Link de Supabase.
 - Zona restringida `/classified` con acceso autenticado y datos desde Supabase.
 - Pagina 404 personalizada con tematica de violacion de seguridad DEMA.
@@ -49,7 +50,7 @@ It also includes hidden tools for technical users, such as an advanced console w
 Puedes abrir la consola avanzada de dos formas:
 You can open the advanced console in two ways:
 
-- Boton `Abrir Consola` en el menu lateral.
+- Boton `Abrir Consola` que lleva a la demo publica `/consola`.
 - Atajo de teclado: `Ctrl + Shift + T`.
 
 Comandos utiles:
@@ -59,8 +60,8 @@ Useful commands:
 - `status`: muestra barra de amenaza DEMA.
 - `vialism`: desbloquea un asset visual oculto dentro de la consola.
 
-La consola es opcional y no bloquea la navegacion principal.
-The console is optional and does not block the main navigation.
+La consola publica es opcional y no bloquea la navegacion principal.
+The public console is optional and does not block the main navigation.
 
 ## Trench Wallet + Smuggler Shop
 
@@ -96,6 +97,43 @@ The console is optional and does not block the main navigation.
 
 - Cada album en la timeline puede expandirse para mostrar su iframe publico de Spotify.
 - Los `spotifyEmbedId` actuales son placeholders y se pueden reemplazar por IDs reales cuando quieras.
+
+## Spotify API Metadata
+
+- La timeline tambien puede consultar metadata real de Spotify mediante la ruta server-side `app/api/spotify/albums/route.ts`.
+- El cliente usa `SPOTIFY_CLIENT_ID` y `SPOTIFY_CLIENT_SECRET` solo en servidor mediante flujo `client_credentials`.
+- Cuando el `spotifyEmbedId` es valido, la UI muestra portada, artistas, fecha de lanzamiento, numero de tracks y enlace directo a Spotify.
+- Si la consulta falla, la timeline conserva el embed y hace fallback visual sin romper la experiencia.
+
+## Lore PDF Integration
+
+- El contenido del PDF `WELCOME TO TRENCH` fue convertido a experiencia web bilingue dentro de la home.
+- `ActClancyBriefing` resume el arco narrativo general antes de entrar al detalle.
+- `ChronologicalEvidence` ahora combina dossier narrativo ES/EN + metadata musical + embed de Spotify.
+- `EvidenceGrid` incluye expedientes nuevos para eras, personajes, ciudad, documentos y organizaciones del lore.
+
+## Accesibilidad y UX
+
+- Enlace `Saltar al contenido principal` disponible desde teclado.
+- Landmarks explicitos en la navegacion principal, menu movil y `main`.
+- Estados `focus-visible` para enlaces, botones e inputs.
+- Consola demo publica en `/consola` para mostrar la experiencia sin registro.
+- Mejora de contraste con paleta `off-black`, texto suavizado y jerarquia visual por niveles de superficie.
+
+## Variables de entorno adicionales
+
+```env
+SPOTIFY_CLIENT_ID=...
+SPOTIFY_CLIENT_SECRET=...
+```
+
+Estas variables se usan en servidor para consultar la API de Spotify y no deben exponerse como variables `NEXT_PUBLIC_*`.
+
+## Notas de portafolio
+
+- `/consola` esta pensada como demo accesible para reclutadores con datos ficticios y sin autenticacion.
+- `/login` y `/classified` siguen representando el flujo autenticado real del proyecto.
+- La interfaz prioriza una experiencia exploratoria: dashboard visual para publico general y herramientas opcionales para usuarios tecnicos.
 
 ## Vista en vivo / Live Demo
 

@@ -44,6 +44,12 @@ const navItems: NavItem[] = [
     icon: Network,
   },
   {
+    id: "consola",
+    label: "Consola Demo",
+    href: "/consola",
+    icon: Command,
+  },
+  {
     id: "login",
     label: "Login",
     href: "/login",
@@ -79,14 +85,17 @@ export default function SecureDashboard() {
         <Menu className="h-5 w-5" />
       </button>
 
-      <aside className="fixed inset-y-0 left-0 hidden w-72 border-r border-clancy-line/80 bg-clancy-surface/88 p-6 backdrop-blur-md md:flex md:flex-col">
+      <aside
+        aria-label="Navegacion principal"
+        className="fixed inset-y-0 left-0 hidden w-72 border-r border-clancy-line/80 bg-clancy-surface/88 p-6 backdrop-blur-md md:flex md:flex-col"
+      >
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
           Secure Panel
         </p>
         <h1 className="mt-2 font-mono text-xl tracking-[0.08em] text-clancy-ink">
           Clancy Dashboard
         </h1>
-        <nav className="mt-8 space-y-2">
+        <nav aria-label="Secciones del dashboard" className="mt-8 space-y-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -101,14 +110,13 @@ export default function SecureDashboard() {
             );
           })}
         </nav>
-        <button
-          type="button"
-          onClick={() => setTerminalOpen(true)}
+        <a
+          href="/consola"
           className="mt-4 flex items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-trench hover:text-clancy-ink hover:shadow-[0_0_16px_rgba(252,227,0,0.28)]"
         >
           <Command className="h-4 w-4 text-clancy-trench transition-all duration-300" />
           <span>Abrir Consola</span>
-        </button>
+        </a>
         <p className="mt-2 font-mono text-[11px] text-zinc-500">
           Atajo: Ctrl + Shift + T
         </p>
@@ -122,7 +130,10 @@ export default function SecureDashboard() {
             aria-label="Cerrar menu"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <aside className="relative h-full w-80 max-w-[88vw] border-r border-clancy-line/80 bg-clancy-surface/92 p-6 backdrop-blur-md">
+          <aside
+            aria-label="Navegacion movil"
+            className="relative h-full w-80 max-w-[88vw] border-r border-clancy-line/80 bg-clancy-surface/92 p-6 backdrop-blur-md"
+          >
             <div className="mb-6 flex items-center justify-between">
               <h2 className="font-mono text-lg tracking-[0.08em] text-clancy-ink">
                 Menu Seguro
@@ -136,7 +147,7 @@ export default function SecureDashboard() {
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <nav className="space-y-2">
+            <nav aria-label="Secciones del dashboard" className="space-y-2">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -152,17 +163,14 @@ export default function SecureDashboard() {
                 );
               })}
             </nav>
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                setTerminalOpen(true);
-              }}
+            <a
+              href="/consola"
+              onClick={() => setMobileMenuOpen(false)}
               className="mt-4 flex w-full items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-trench hover:text-clancy-ink hover:shadow-[0_0_14px_rgba(252,227,0,0.22)]"
             >
               <Command className="h-4 w-4 text-clancy-trench transition-all duration-300" />
               <span>Abrir Consola</span>
-            </button>
+            </a>
             <p className="mt-2 font-mono text-[11px] text-zinc-500">
               Atajo: Ctrl + Shift + T
             </p>
@@ -170,7 +178,7 @@ export default function SecureDashboard() {
         </div>
       ) : null}
 
-      <main className="md:pl-72">
+      <main id="main-content" tabIndex={-1} className="md:pl-72">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-4 pt-20 sm:p-6 sm:pt-24 md:p-10 md:pt-10">
           <header className="sticky top-3 z-30 flex items-center justify-between rounded-xl border border-clancy-line/80 bg-clancy-surface/88 px-4 py-3 backdrop-blur-md">
             <p className="font-mono text-sm text-clancy-ink">Operacion Trench Wallet</p>
