@@ -201,6 +201,7 @@ export default function ChronologicalEvidence() {
                           alt={`Portada del album ${spotifyAlbum.name} de ${spotifyAlbum.artists.join(", ")}`}
                           width={96}
                           height={96}
+                          sizes="96px"
                           className="h-24 w-24 rounded-md border border-clancy-line/70 object-cover"
                         />
                       ) : null}

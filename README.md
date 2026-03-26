@@ -105,6 +105,24 @@ The public console is optional and does not block the main navigation.
 - Cuando el `spotifyEmbedId` es valido, la UI muestra portada, artistas, fecha de lanzamiento, numero de tracks y enlace directo a Spotify.
 - Si la consulta falla, la timeline conserva el embed y hace fallback visual sin romper la experiencia.
 
+## Performance y Core Web Vitals
+
+- El proyecto se revisa con `corepack pnpm build` para detectar peso de rutas, JS compartido y problemas de compilacion antes de optimizar.
+- La referencia de trabajo para auditorias es Lighthouse / PageSpeed Insights con foco en `LCP`, `CLS`, `TTFB` y el resto de Core Web Vitals.
+- Objetivos recomendados:
+  - `LCP < 2.5s`
+  - `CLS < 0.1`
+  - `FID < 100ms`
+- La home y la consola demo priorizan carga estatica donde es posible; los datos de Spotify se consultan por ruta server-side con fallback para no romper la renderizacion.
+
+## Optimizacion de imagenes
+
+- Las imagenes reales de la interfaz usan `next/image`.
+- Las portadas de Spotify declaran `sizes` para evitar descargas sobredimensionadas.
+- El asset desbloqueado de la consola tambien declara `sizes` responsivo.
+- No se fuerza `priority` donde no existe una imagen LCP clara above-the-fold; los fondos principales son gradientes CSS y no archivos raster.
+- Los fondos visuales decorativos actuales se resuelven con CSS (`linear-gradient` / `radial-gradient`), por lo que no aplica migrarlos a `next/image`.
+
 ## Lore PDF Integration
 
 - El contenido del PDF `WELCOME TO TRENCH` fue convertido a experiencia web bilingue dentro de la home.
