@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -171,9 +172,15 @@ export default function EvidenceGrid() {
                 >
                   {selectedEvidence.badge}
                 </span>
-                <p className="mt-3 text-sm text-clancy-muted">
-                  {selectedEvidence.shortDescription}
-                </p>
+              <p className="mt-3 text-sm text-clancy-muted">
+                {selectedEvidence.shortDescription}
+              </p>
+              <Link
+                href={`/expedientes/${selectedEvidence.id}`}
+                className="mt-4 inline-flex items-center rounded-md border border-clancy-fire/45 bg-clancy-fire/10 px-3 py-2 font-mono text-xs uppercase tracking-[0.12em] text-clancy-fire transition hover:shadow-[0_0_14px_rgba(255,46,46,0.2)]"
+              >
+                Ver URL del expediente
+              </Link>
               </div>
 
               <div className="mt-6 space-y-4">
