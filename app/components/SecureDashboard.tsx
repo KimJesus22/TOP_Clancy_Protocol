@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import {
   Command,
   Home,
@@ -11,15 +12,9 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ComponentType, useEffect, useRef, useState } from "react";
-import BroadcastGallery from "./BroadcastGallery";
 import ChronologicalEvidence from "./ChronologicalEvidence";
 import DecodeChallenge from "./DecodeChallenge";
-import EvidenceGrid from "./EvidenceGrid";
 import ActClancyBriefing from "./ActClancyBriefing";
-import LoreDecryptor from "./LoreDecryptor";
-import NetworkScanner from "./NetworkScanner";
-import TerminalInterface from "./TerminalInterface";
-import ThreatMap from "./ThreatMap";
 import WalletIndicator from "./WalletIndicator";
 import { getFocusableElements, trapFocusInContainer } from "@/src/lib/accessibility";
 
@@ -57,6 +52,95 @@ const navItems: NavItem[] = [
     icon: LogIn,
   },
 ];
+
+function SectionSkeleton({
+  title,
+  description,
+  minHeightClass = "min-h-[320px]",
+}: {
+  title: string;
+  description: string;
+  minHeightClass?: string;
+}) {
+  return (
+    <section
+      aria-busy="true"
+      className={`rounded-xl border border-clancy-line/80 bg-clancy-surface/88 p-6 backdrop-blur-md ${minHeightClass}`}
+    >
+      <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
+        Cargando modulo
+      </p>
+      <h2 className="mt-2 font-mono text-2xl tracking-[0.08em] text-clancy-ink">{title}</h2>
+      <p className="mt-3 max-w-2xl text-sm text-clancy-muted">{description}</p>
+      <div className="mt-6 space-y-3">
+        <div className="h-12 rounded-lg border border-clancy-line/70 bg-clancy-raised/72" />
+        <div className="h-12 rounded-lg border border-clancy-line/70 bg-clancy-raised/72" />
+        <div className="h-12 rounded-lg border border-clancy-line/70 bg-clancy-raised/72" />
+      </div>
+    </section>
+  );
+}
+
+const EvidenceGrid = dynamic(() => import("./EvidenceGrid"), {
+  loading: () => (
+    <SectionSkeleton
+      title="Evidence Grid"
+      description="Preparando los expedientes recuperados y el panel lateral de detalle."
+      minHeightClass="min-h-[420px]"
+    />
+  ),
+});
+
+const NetworkScanner = dynamic(() => import("./NetworkScanner"), {
+  loading: () => (
+    <SectionSkeleton
+      title="Radar de Red"
+      description="Inicializando el modulo de reconocimiento de superficie y sus hallazgos."
+      minHeightClass="min-h-[360px]"
+    />
+  ),
+});
+
+const ThreatMap = dynamic(() => import("./ThreatMap"), {
+  loading: () => (
+    <SectionSkeleton
+      title="Radar de Amenazas Globales"
+      description="Cargando el mapa tactico y reservando espacio para evitar desplazamientos de layout."
+      minHeightClass="min-h-[420px]"
+    />
+  ),
+});
+
+const LoreDecryptor = dynamic(() => import("./LoreDecryptor"), {
+  loading: () => (
+    <SectionSkeleton
+      title="Mensajes cifrados de DEMA"
+      description="Conectando con el feed de mensajes y preparando fallback estable."
+      minHeightClass="min-h-[300px]"
+    />
+  ),
+});
+
+const BroadcastGallery = dynamic(() => import("./BroadcastGallery"), {
+  loading: () => (
+    <SectionSkeleton
+      title="Transmisiones Interceptadas de DEMA"
+      description="Reservando espacio para los reproductores de video oficiales."
+      minHeightClass="min-h-[520px]"
+    />
+  ),
+});
+
+const TerminalInterface = dynamic(() => import("./TerminalInterface"), {
+  loading: () => (
+    <div className="rounded-xl border border-clancy-line/80 bg-clancy-surface/90 p-6 backdrop-blur-md">
+      <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
+        Cargando consola
+      </p>
+      <div className="mt-4 h-[320px] rounded-lg border border-clancy-line/70 bg-clancy-raised/72" />
+    </div>
+  ),
+});
 
 export default function SecureDashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

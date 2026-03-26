@@ -10,6 +10,7 @@ An interactive cybersecurity-themed Dashboard inspired by the Twenty One Pilots 
 - Tailwind CSS
 - Framer Motion
 - Lucide React
+- next-sitemap
 - Zustand
 - Supabase (`@supabase/supabase-js`, `@supabase/ssr`)
 
@@ -26,6 +27,7 @@ It also includes hidden tools for technical users, such as an advanced console w
 - Sidebar responsive con Glassmorphism y navegacion por secciones.
 - Dashboard visual para usuarios no tecnicos + herramientas ocultas para usuarios avanzados.
 - Grid de expedientes con panel lateral de detalles forenses.
+- Archivo indexable de expedientes con rutas limpias tipo `/expedientes/[slug]`.
 - Timeline cronologica de albumes con animaciones por scroll.
 - Reproductores de Spotify embebidos por album (acordeon expandible).
 - Broadcast Gallery con videos oficiales en YouTube (iframes).
@@ -118,6 +120,11 @@ The public console is optional and does not block the main navigation.
   - `CLS < 0.1`
   - `FID < 100ms`
 - La home y la consola demo priorizan carga estatica donde es posible; los datos de Spotify se consultan por ruta server-side con fallback para no romper la renderizacion.
+- La home ahora divide codigo con `next/dynamic` para modulos pesados por debajo del primer scroll.
+- Se reservaron alturas de carga para varios bloques y reproductores, reduciendo riesgo de `CLS`.
+- Mejora medida en build para `/`:
+  - antes: `29.6 kB` y `293 kB First Load JS`
+  - despues: `20.3 kB` y `233 kB First Load JS`
 
 ## Render estatico e ISR
 
@@ -156,6 +163,38 @@ The public console is optional and does not block the main navigation.
 - `app/layout.tsx` define `metadataBase`, plantilla de titulos y defaults globales de Open Graph/Twitter.
 - La pagina `/smuggler` fue separada en pagina server + componente cliente (`SmugglerStorefront`) para cumplir la restriccion de Next.js que impide exportar `metadata` desde componentes marcados con `"use client"`.
 
+## Rutas semanticas
+
+- Los expedientes ya no dependen solo del panel lateral del dashboard.
+- Existe un indice publico en `/expedientes`.
+- Cada evidencia tiene su propia URL descriptiva, por ejemplo:
+  - `/expedientes/blurryface`
+  - `/expedientes/trench`
+  - `/expedientes/dema`
+  - `/expedientes/red-envelope`
+- Estas rutas se prerenderizan con `generateStaticParams`, lo que mejora compartibilidad, crawl e indexacion.
+
+## Datos estructurados y AEO
+
+- La home publica JSON-LD con esquemas `WebSite`, `WebPage` y `FAQPage`.
+- `/expedientes` publica `CollectionPage`, `ItemList` y `FAQPage`.
+- Cada `/expedientes/[slug]` publica `Article`, `BreadcrumbList` y `FAQPage`.
+- La utilidad `src/lib/structured-data.ts` centraliza la generacion de bloques JSON-LD para mantener consistencia y facilitar Answer Engine Optimization.
+
+## Sitemap y robots
+
+- `next-sitemap` genera automaticamente:
+  - `public/sitemap.xml`
+  - `public/sitemap-0.xml`
+  - `public/robots.txt`
+- La generacion corre en `postbuild`, por lo que `corepack pnpm build` deja estos archivos listos.
+- Se excluyen de indexacion rutas no utiles para crawlers, como:
+  - `/api/*`
+  - `/classified`
+  - `opengraph-image`
+- `/` y `/expedientes` reciben prioridad superior dentro del sitemap.
+- Para produccion conviene definir `NEXT_PUBLIC_SITE_URL` con el dominio publico real, evitando que sitemap y metadata usen `http://localhost:3000`.
+
 ## Lore PDF Integration
 
 - El contenido del PDF `WELCOME TO TRENCH` fue convertido a experiencia web bilingue dentro de la home.
@@ -187,6 +226,7 @@ The public console is optional and does not block the main navigation.
 ```env
 SPOTIFY_CLIENT_ID=...
 SPOTIFY_CLIENT_SECRET=...
+NEXT_PUBLIC_SITE_URL=...
 ```
 
 Estas variables se usan en servidor para consultar la API de Spotify y no deben exponerse como variables `NEXT_PUBLIC_*`.
