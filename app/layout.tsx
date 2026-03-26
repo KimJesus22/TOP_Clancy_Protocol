@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fira_Code, Inter, Noto_Sans_JP, Noto_Sans_KR } from "next/font/google";
+import { metadataBaseUrl } from "@/src/lib/metadata";
 import DemaRadioPlayer from "./components/DemaRadioPlayer";
 import ThemeApplier from "./components/ThemeApplier";
 import "./globals.css";
@@ -31,8 +32,30 @@ const notoSansJp = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "Clancy Protocol",
-  description: "Twenty One Pilots Clancy aesthetic starter",
+  metadataBase: metadataBaseUrl,
+  title: {
+    default: "Clancy Protocol",
+    template: "%s | Clancy Protocol",
+  },
+  description:
+    "Dashboard narrativo inspirado en Twenty One Pilots con lore de Clancy, expedientes, analisis de red y consola interactiva.",
+  applicationName: "Clancy Protocol",
+  category: "portfolio",
+  keywords: [
+    "Clancy Protocol",
+    "Twenty One Pilots",
+    "Clancy",
+    "dashboard narrativo",
+    "Next.js portfolio",
+  ],
+  openGraph: {
+    type: "website",
+    locale: "es_MX",
+    siteName: "Clancy Protocol",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({

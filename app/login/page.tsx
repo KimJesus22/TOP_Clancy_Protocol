@@ -1,4 +1,14 @@
+import type { Metadata } from "next";
 import BanditoLogin from "../components/BanditoLogin";
+import { buildPageMetadata } from "@/src/lib/metadata";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Login",
+  description:
+    "Acceso por magic link a zonas restringidas del proyecto con autenticacion alineada al universo DEMA.",
+  path: "/login",
+  keywords: ["login", "magic link", "supabase auth", "DEMA"],
+});
 
 export default function LoginPage() {
   return (

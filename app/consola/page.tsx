@@ -1,9 +1,19 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Command, LogIn, ShieldAlert } from "lucide-react";
 import TerminalInterface from "../components/TerminalInterface";
+import { buildPageMetadata } from "@/src/lib/metadata";
 
 export const dynamic = "force-static";
 export const revalidate = 3600;
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Consola Demo",
+  description:
+    "Demo publica de la terminal del proyecto, accesible sin registro y pensada para mostrar la experiencia en portafolio.",
+  path: "/consola",
+  keywords: ["consola", "terminal demo", "portfolio", "clancy protocol"],
+});
 
 const samplePrompts = [
   "help",

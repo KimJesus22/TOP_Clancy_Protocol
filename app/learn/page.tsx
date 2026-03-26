@@ -1,7 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { BookOpen, Shield, Terminal, ArrowLeft } from "lucide-react";
 import LearnLessonHub from "../components/LearnLessonHub";
 import { topLessons } from "@/src/lib/data/lessons";
+import { buildPageMetadata } from "@/src/lib/metadata";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Analisis y Aprendizaje",
+  description:
+    "Modulo de aprendizaje con progreso, vocabulario y ejercicios guiados dentro de la experiencia Bandito.",
+  path: "/learn",
+  keywords: ["analisis", "aprendizaje", "ingles", "bandito", "modulos"],
+});
 
 const modules = [
   {

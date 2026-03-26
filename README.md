@@ -92,6 +92,10 @@ The public console is optional and does not block the main navigation.
   - expone el formulario `BanditoLogin`
   - envia Magic Link para acceso autenticado
 - Lore en tiempo real con `LoreDecryptor` sobre tabla `dema_messages`.
+- Si la conexion al feed de `dema_messages` falla, `LoreDecryptor` no rompe la UI:
+  - traduce errores de red como `Failed to fetch` a mensajes legibles
+  - muestra fallback visual claro para usuario final
+  - permite reintentar la conexion manualmente
 
 ## Spotify Embeds
 
@@ -115,6 +119,12 @@ The public console is optional and does not block the main navigation.
   - `FID < 100ms`
 - La home y la consola demo priorizan carga estatica donde es posible; los datos de Spotify se consultan por ruta server-side con fallback para no romper la renderizacion.
 
+## Render estatico e ISR
+
+- En App Router se usa prerender estatico para las vistas publicas principales en lugar de `getStaticProps`.
+- `/` y `/consola` declaran render estatico con `revalidate = 3600`, permitiendo Incremental Static Regeneration cada 1 hora.
+- Este enfoque mejora velocidad inicial, cacheabilidad y base SEO para contenido mayormente editorial como timeline, briefing y demo publica.
+
 ## Optimizacion de imagenes
 
 - Las imagenes reales de la interfaz usan `next/image`.
@@ -129,6 +139,22 @@ The public console is optional and does not block the main navigation.
 - Se usa `display: "swap"` para evitar bloqueo de render mientras cargan las fuentes personalizadas.
 - Las fuentes secundarias `Noto Sans KR` y `Noto Sans JP` deshabilitan `preload` para no competir con la ruta critica de la home.
 - La prioridad de carga queda concentrada en las familias base de interfaz (`Inter` y `Fira Code`).
+
+## Metadata, SEO y Open Graph
+
+- El proyecto usa la API `metadata` de Next.js 15 en App Router para definir `title`, `description`, canonical y etiquetas sociales por ruta.
+- Existe una capa reutilizable en `src/lib/metadata.ts` para mantener consistencia entre paginas.
+- Se generan miniaturas Open Graph/Twitter dinamicas con `next/og` desde `src/lib/opengraph-image.tsx`.
+- Rutas con metadata y vista previa social dedicada:
+  - `/`
+  - `/classified`
+  - `/learn`
+  - `/consola`
+  - `/login`
+  - `/smuggler`
+- Cada una expone su propia ruta `opengraph-image`, lo que permite compartir vistas del dashboard sin depender de assets manuales en `public/`.
+- `app/layout.tsx` define `metadataBase`, plantilla de titulos y defaults globales de Open Graph/Twitter.
+- La pagina `/smuggler` fue separada en pagina server + componente cliente (`SmugglerStorefront`) para cumplir la restriccion de Next.js que impide exportar `metadata` desde componentes marcados con `"use client"`.
 
 ## Lore PDF Integration
 

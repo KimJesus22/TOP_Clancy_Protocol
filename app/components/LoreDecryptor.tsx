@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   isSupabaseConfigured,
   supabase,
@@ -14,41 +14,84 @@ type DemaMessage = {
   threat_level: number;
 };
 
+function getReadableDemaError(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error ?? "");
+  const normalizedMessage = message.toLowerCase();
+
+  if (
+    normalizedMessage.includes("failed to fetch") ||
+    normalizedMessage.includes("networkerror") ||
+    normalizedMessage.includes("network request failed") ||
+    normalizedMessage.includes("load failed")
+  ) {
+    return "Sin conexion al servidor de mensajes. Verifica la red o la configuracion de Supabase.";
+  }
+
+  if (
+    normalizedMessage.includes("invalid api key") ||
+    normalizedMessage.includes("jwt") ||
+    normalizedMessage.includes("unauthorized") ||
+    normalizedMessage.includes("forbidden")
+  ) {
+    return "No fue posible autenticar la conexion con el servidor de mensajes.";
+  }
+
+  if (normalizedMessage.includes("relation") || normalizedMessage.includes("does not exist")) {
+    return "La tabla `dema_messages` no esta disponible en la base de datos.";
+  }
+
+  return "No se pudieron cargar los mensajes cifrados de DEMA.";
+}
+
 export default function LoreDecryptor() {
   const [messages, setMessages] = useState<DemaMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
+
+  const loadMessages = useCallback(async (client: NonNullable<typeof supabase>) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { data, error: selectError } = await client
+        .from("dema_messages")
+        .select("id, message_title, decrypted_content, threat_level")
+        .order("id", { ascending: true });
+
+      if (selectError) {
+        throw selectError;
+      }
+
+      setMessages((data ?? []) as DemaMessage[]);
+    } catch (loadError) {
+      setMessages([]);
+      setError(getReadableDemaError(loadError));
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     const client = supabase;
 
     if (!client) {
-      setError(supabaseConfigError ?? "Supabase no configurado.");
+      setError(
+        supabaseConfigError
+          ? "Sin conexion al servidor de mensajes. Configura las variables publicas de Supabase."
+          : "Supabase no esta configurado.",
+      );
       setLoading(false);
       return;
     }
 
     let mounted = true;
 
-    const loadMessages = async () => {
-      const { data, error: selectError } = await client
-        .from("dema_messages")
-        .select("id, message_title, decrypted_content, threat_level")
-        .order("id", { ascending: true });
-
-      if (!mounted) return;
-
-      if (selectError) {
-        setError(selectError.message);
-        setLoading(false);
-        return;
-      }
-
-      setMessages((data ?? []) as DemaMessage[]);
-      setLoading(false);
+    const syncMessages = async () => {
+      await loadMessages(client);
     };
 
-    loadMessages();
+    syncMessages();
 
     const channel = client
       .channel("dema-messages-feed")
@@ -56,7 +99,9 @@ export default function LoreDecryptor() {
         "postgres_changes",
         { event: "*", schema: "public", table: "dema_messages" },
         () => {
-          loadMessages();
+          if (mounted) {
+            syncMessages();
+          }
         },
       )
       .subscribe();
@@ -65,7 +110,7 @@ export default function LoreDecryptor() {
       mounted = false;
       client.removeChannel(channel);
     };
-  }, []);
+  }, [loadMessages, reloadKey]);
 
   return (
     <section className="rounded-xl border border-white/10 bg-black/40 p-6 shadow-[0_0_20px_rgba(255,46,46,0.14)] backdrop-blur-md">
@@ -83,7 +128,24 @@ export default function LoreDecryptor() {
       ) : null}
 
       {loading ? <p className="mt-4 text-sm text-zinc-400">Cargando mensajes...</p> : null}
-      {error ? <p className="mt-4 text-sm text-clancy-fire">Error: {error}</p> : null}
+      {error ? (
+        <div
+          className="mt-4 rounded-lg border border-clancy-fire/35 bg-clancy-fire/10 p-4"
+          role="status"
+          aria-live="polite"
+        >
+          <p className="text-sm text-clancy-fire">{error}</p>
+          {isSupabaseConfigured ? (
+            <button
+              type="button"
+              onClick={() => setReloadKey((current) => current + 1)}
+              className="mt-3 rounded-md border border-clancy-fire/45 px-3 py-2 font-mono text-xs uppercase tracking-[0.16em] text-clancy-fire transition hover:bg-clancy-fire/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clancy-fire/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            >
+              Reintentar conexion
+            </button>
+          ) : null}
+        </div>
+      ) : null}
 
       {!loading && !error ? (
         <div className="mt-4 space-y-3">

@@ -1,5 +1,15 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
+import { buildPageMetadata } from "@/src/lib/metadata";
 import InterceptedMessages from "./InterceptedMessages";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Expedientes Clasificados",
+  description:
+    "Zona autenticada con mensajes interceptados de DEMA y registros reservados para vistas protegidas del dashboard.",
+  path: "/classified",
+  keywords: ["expedientes", "classified", "DEMA", "intercepted messages"],
+});
 
 function ClassifiedLoading() {
   return (
