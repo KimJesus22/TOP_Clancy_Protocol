@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import useSWR from "swr";
 import { topAlbums } from "@/lib/data/albums";
 
 const containerVariants = {
@@ -33,16 +34,26 @@ type SpotifyAlbumMetadata = {
   spotifyUrl: string | null;
 };
 
+type SpotifyAlbumsResponse = {
+  albums?: Record<string, SpotifyAlbumMetadata>;
+};
+
 function isLikelySpotifyAlbumId(value: string) {
   return /^[A-Za-z0-9]{22}$/.test(value);
 }
 
+async function spotifyAlbumsFetcher(url: string) {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`Spotify metadata request failed with ${response.status}.`);
+  }
+
+  return (await response.json()) as SpotifyAlbumsResponse;
+}
+
 export default function ChronologicalEvidence() {
   const [expandedAlbumId, setExpandedAlbumId] = useState<string | null>(null);
-  const [spotifyAlbums, setSpotifyAlbums] = useState<
-    Record<string, SpotifyAlbumMetadata>
-  >({});
-  const [spotifyError, setSpotifyError] = useState<string | null>(null);
 
   const spotifyAlbumIds = useMemo(
     () =>
@@ -52,46 +63,23 @@ export default function ChronologicalEvidence() {
     [],
   );
 
-  useEffect(() => {
-    if (spotifyAlbumIds.length === 0) {
-      return;
-    }
+  const spotifyAlbumsUrl =
+    spotifyAlbumIds.length > 0
+      ? `/api/spotify/albums?ids=${encodeURIComponent(spotifyAlbumIds.join(","))}`
+      : null;
 
-    let cancelled = false;
+  const { data: spotifyData, error: spotifyError } = useSWR(
+    spotifyAlbumsUrl,
+    spotifyAlbumsFetcher,
+    {
+      dedupingInterval: 60_000,
+      keepPreviousData: true,
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    },
+  );
 
-    const loadSpotifyAlbums = async () => {
-      try {
-        const response = await fetch(
-          `/api/spotify/albums?ids=${encodeURIComponent(spotifyAlbumIds.join(","))}`,
-        );
-
-        if (!response.ok) {
-          throw new Error(`Spotify metadata request failed with ${response.status}.`);
-        }
-
-        const data = (await response.json()) as {
-          albums?: Record<string, SpotifyAlbumMetadata>;
-        };
-
-        if (!cancelled) {
-          setSpotifyAlbums(data.albums ?? {});
-          setSpotifyError(null);
-        }
-      } catch (error) {
-        if (!cancelled) {
-          setSpotifyError(
-            error instanceof Error ? error.message : "Spotify metadata unavailable.",
-          );
-        }
-      }
-    };
-
-    loadSpotifyAlbums();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [spotifyAlbumIds]);
+  const spotifyAlbums = spotifyData?.albums ?? {};
 
   return (
     <section className="scroll-mt-24 rounded-xl border border-clancy-line/80 bg-clancy-surface/88 p-6 shadow-[0_0_20px_rgba(255,46,46,0.14)] backdrop-blur-md">
@@ -240,7 +228,7 @@ export default function ChronologicalEvidence() {
                       <p className="font-mono text-xs uppercase tracking-[0.12em] text-clancy-fire">
                         Spotify Metadata
                       </p>
-                        <p className="mt-2 text-sm text-clancy-muted">
+                      <p className="mt-2 text-sm text-clancy-muted">
                         No se pudo cargar metadata en tiempo real. El embed sigue
                         disponible.
                       </p>
