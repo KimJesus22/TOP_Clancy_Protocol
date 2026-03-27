@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
 import { topAlbums } from "@/lib/data/albums";
 
@@ -42,24 +42,10 @@ function isLikelySpotifyAlbumId(value: string) {
   return /^[A-Za-z0-9]{22}$/.test(value);
 }
 
-async function spotifyAlbumsFetcher(url: string) {
-  const response = await fetch(url, {
-    cache: "no-store",
-    headers: {
-      Accept: "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Spotify metadata request failed with ${response.status}.`);
-  }
-
-  return (await response.json()) as SpotifyAlbumsResponse;
-}
-
 export default function ChronologicalEvidence() {
   const [expandedAlbumId, setExpandedAlbumId] = useState<string | null>(null);
   const shouldReduceMotion = useReducedMotion();
+  const requestControllerRef = useRef<AbortController | null>(null);
 
   const spotifyAlbumIds = useMemo(
     () =>
@@ -73,6 +59,33 @@ export default function ChronologicalEvidence() {
     spotifyAlbumIds.length > 0
       ? `/api/spotify/albums?ids=${encodeURIComponent(spotifyAlbumIds.join(","))}`
       : null;
+
+  const spotifyAlbumsFetcher = useCallback(async (url: string) => {
+    requestControllerRef.current?.abort();
+
+    const controller = new AbortController();
+    requestControllerRef.current = controller;
+
+    const response = await fetch(url, {
+      cache: "no-store",
+      signal: controller.signal,
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Spotify metadata request failed with ${response.status}.`);
+    }
+
+    return (await response.json()) as SpotifyAlbumsResponse;
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      requestControllerRef.current?.abort();
+    };
+  }, []);
 
   const { data: spotifyData, error: spotifyError } = useSWR(
     spotifyAlbumsUrl,

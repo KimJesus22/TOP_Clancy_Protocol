@@ -161,6 +161,7 @@ The public console is optional and does not block the main navigation.
   - `FID < 100ms`
 - La home y la consola demo priorizan carga estatica donde es posible; los datos de Spotify se consultan por ruta server-side con fallback para no romper la renderizacion.
 - La home ahora divide codigo con `next/dynamic` para modulos pesados por debajo del primer scroll.
+- Componentes como `EvidenceGrid`, `NetworkScanner`, `ThreatMap`, `LoreDecryptor`, `BroadcastGallery` y `TerminalInterface` se cargan de forma diferida con placeholders mientras llegan sus bundles.
 - Se reservaron alturas de carga para varios bloques y reproductores, reduciendo riesgo de `CLS`.
 - Los iframes de Spotify ya no se montan en todos los albumes por defecto; ahora se renderizan solo al expandir cada expediente.
 - Los iframes de YouTube en `BroadcastGallery` se montan solo cuando entran en viewport y mantienen placeholder con altura fija.
@@ -179,9 +180,12 @@ The public console is optional and does not block the main navigation.
 
 - Las imagenes reales de la interfaz usan `next/image`.
 - Las portadas de Spotify declaran `sizes` para evitar descargas sobredimensionadas.
+- Las imagenes renderizadas con `next/image` declaran `width` y `height` concretos para estabilizar layout.
 - El asset desbloqueado de la consola tambien declara `sizes` responsivo.
 - No se fuerza `priority` donde no existe una imagen LCP clara above-the-fold; los fondos principales son gradientes CSS y no archivos raster.
 - Los fondos visuales decorativos actuales se resuelven con CSS (`linear-gradient` / `radial-gradient`), por lo que no aplica migrarlos a `next/image`.
+- Los iframes de Spotify usan `loading="lazy"` y se diferencian de los de YouTube en que solo se montan cuando el usuario expande el album.
+- Los iframes de YouTube tambien usan carga diferida y esperan al viewport antes de montarse.
 
 ## Carga de fuentes
 
