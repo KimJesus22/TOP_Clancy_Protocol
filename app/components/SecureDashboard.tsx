@@ -1,87 +1,19 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import {
-  Command,
-  Home,
-  LogIn,
-  Menu,
-  Network,
-  FolderOpen,
-  X,
-} from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
-import { ComponentType, useEffect, useRef, useState } from "react";
-import ChronologicalEvidence from "./ChronologicalEvidence";
-import DecodeChallenge from "./DecodeChallenge";
-import ActClancyBriefing from "./ActClancyBriefing";
-import WalletIndicator from "./WalletIndicator";
-import { getFocusableElements, trapFocusInContainer } from "@/src/lib/accessibility";
+import { useRef, useState } from "react";
+import ChronologicalEvidence from "@/app/components/ChronologicalEvidence";
+import DecodeChallenge from "@/app/components/DecodeChallenge";
+import ActClancyBriefing from "@/app/components/ActClancyBriefing";
+import WalletIndicator from "@/app/components/WalletIndicator";
+import AdvancedTerminalDialog from "@/app/components/secure-dashboard/AdvancedTerminalDialog";
+import MobileNavigation from "@/app/components/secure-dashboard/MobileNavigation";
+import SectionSkeleton from "@/app/components/secure-dashboard/SectionSkeleton";
+import SidebarNavigation from "@/app/components/secure-dashboard/SidebarNavigation";
+import { useOverlayFocusTrap } from "@/src/hooks/useOverlayFocusTrap";
+import { useTerminalShortcut } from "@/src/hooks/useTerminalShortcut";
 
-type NavItem = {
-  id: string;
-  label: string;
-  href: string;
-  icon: ComponentType<{ className?: string }>;
-};
-
-const navItems: NavItem[] = [
-  { id: "inicio", label: "Inicio", href: "#inicio", icon: Home },
-  {
-    id: "expedientes",
-    label: "Expedientes (Discografia)",
-    href: "#expedientes",
-    icon: FolderOpen,
-  },
-  {
-    id: "analisis",
-    label: "Analisis de Red",
-    href: "#analisis-red",
-    icon: Network,
-  },
-  {
-    id: "consola",
-    label: "Consola Demo",
-    href: "/consola",
-    icon: Command,
-  },
-  {
-    id: "login",
-    label: "Login",
-    href: "/login",
-    icon: LogIn,
-  },
-];
-
-function SectionSkeleton({
-  title,
-  description,
-  minHeightClass = "min-h-[320px]",
-}: {
-  title: string;
-  description: string;
-  minHeightClass?: string;
-}) {
-  return (
-    <section
-      aria-busy="true"
-      className={`rounded-xl border border-clancy-line/80 bg-clancy-surface/88 p-6 backdrop-blur-md ${minHeightClass}`}
-    >
-      <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
-        Cargando modulo
-      </p>
-      <h2 className="mt-2 font-mono text-2xl tracking-[0.08em] text-clancy-ink">{title}</h2>
-      <p className="mt-3 max-w-2xl text-sm text-clancy-muted">{description}</p>
-      <div className="mt-6 space-y-3">
-        <div className="h-12 rounded-lg border border-clancy-line/70 bg-clancy-raised/72" />
-        <div className="h-12 rounded-lg border border-clancy-line/70 bg-clancy-raised/72" />
-        <div className="h-12 rounded-lg border border-clancy-line/70 bg-clancy-raised/72" />
-      </div>
-    </section>
-  );
-}
-
-const EvidenceGrid = dynamic(() => import("./EvidenceGrid"), {
+const EvidenceGrid = dynamic(() => import("@/app/components/EvidenceGrid"), {
   loading: () => (
     <SectionSkeleton
       title="Evidence Grid"
@@ -91,7 +23,7 @@ const EvidenceGrid = dynamic(() => import("./EvidenceGrid"), {
   ),
 });
 
-const NetworkScanner = dynamic(() => import("./NetworkScanner"), {
+const NetworkScanner = dynamic(() => import("@/app/components/NetworkScanner"), {
   loading: () => (
     <SectionSkeleton
       title="Radar de Red"
@@ -101,7 +33,7 @@ const NetworkScanner = dynamic(() => import("./NetworkScanner"), {
   ),
 });
 
-const ThreatMap = dynamic(() => import("./ThreatMap"), {
+const ThreatMap = dynamic(() => import("@/app/components/ThreatMap"), {
   loading: () => (
     <SectionSkeleton
       title="Radar de Amenazas Globales"
@@ -111,7 +43,7 @@ const ThreatMap = dynamic(() => import("./ThreatMap"), {
   ),
 });
 
-const LoreDecryptor = dynamic(() => import("./LoreDecryptor"), {
+const LoreDecryptor = dynamic(() => import("@/app/components/LoreDecryptor"), {
   loading: () => (
     <SectionSkeleton
       title="Mensajes cifrados de DEMA"
@@ -121,7 +53,7 @@ const LoreDecryptor = dynamic(() => import("./LoreDecryptor"), {
   ),
 });
 
-const BroadcastGallery = dynamic(() => import("./BroadcastGallery"), {
+const BroadcastGallery = dynamic(() => import("@/app/components/BroadcastGallery"), {
   loading: () => (
     <SectionSkeleton
       title="Transmisiones Interceptadas de DEMA"
@@ -131,7 +63,7 @@ const BroadcastGallery = dynamic(() => import("./BroadcastGallery"), {
   ),
 });
 
-const TerminalInterface = dynamic(() => import("./TerminalInterface"), {
+const TerminalInterface = dynamic(() => import("@/app/components/TerminalInterface"), {
   loading: () => (
     <div className="rounded-xl border border-clancy-line/80 bg-clancy-surface/90 p-6 backdrop-blur-md">
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
@@ -153,171 +85,41 @@ export default function SecureDashboard() {
   const terminalCloseRef = useRef<HTMLButtonElement | null>(null);
   const terminalTriggerRef = useRef<HTMLElement | null>(null);
 
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === "t") {
-        event.preventDefault();
-        terminalTriggerRef.current = document.activeElement as HTMLElement | null;
-        setTerminalOpen(true);
-      }
-    };
+  useTerminalShortcut({
+    onCaptureTrigger: (element) => {
+      terminalTriggerRef.current = element;
+    },
+    onOpen: () => setTerminalOpen(true),
+  });
 
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  useOverlayFocusTrap({
+    isOpen: mobileMenuOpen,
+    container: mobileMenuRef.current,
+    initialFocus: mobileMenuCloseRef.current,
+    returnFocus: mobileMenuTriggerRef.current,
+    onClose: () => setMobileMenuOpen(false),
+  });
 
-  useEffect(() => {
-    if (!mobileMenuOpen) {
-      mobileMenuTriggerRef.current?.focus();
-      return;
-    }
-
-    mobileMenuCloseRef.current?.focus();
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        setMobileMenuOpen(false);
-        return;
-      }
-
-      trapFocusInContainer(event, mobileMenuRef.current);
-    };
-
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [mobileMenuOpen]);
-
-  useEffect(() => {
-    if (!terminalOpen) {
-      terminalTriggerRef.current?.focus();
-      return;
-    }
-
-    const focusableElements = getFocusableElements(terminalDialogRef.current);
-    const firstTarget = terminalCloseRef.current ?? focusableElements[0];
-    firstTarget?.focus();
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        setTerminalOpen(false);
-        return;
-      }
-
-      trapFocusInContainer(event, terminalDialogRef.current);
-    };
-
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [terminalOpen]);
+  useOverlayFocusTrap({
+    isOpen: terminalOpen,
+    container: terminalDialogRef.current,
+    initialFocus: terminalCloseRef.current,
+    returnFocus: terminalTriggerRef.current,
+    onClose: () => setTerminalOpen(false),
+  });
 
   return (
     <div className="min-h-screen">
-      <button
-        ref={mobileMenuTriggerRef}
-        type="button"
-        aria-label="Abrir menu"
-        className="fixed left-4 top-4 z-50 rounded-md border border-clancy-line/80 bg-clancy-surface/90 p-2 text-clancy-ink backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/60 hover:text-clancy-fire hover:shadow-[0_0_14px_rgba(255,46,46,0.25)] md:hidden"
-        onClick={() => setMobileMenuOpen(true)}
-      >
-        <Menu className="h-5 w-5" />
-      </button>
+      <MobileNavigation
+        isOpen={mobileMenuOpen}
+        triggerRef={mobileMenuTriggerRef}
+        panelRef={mobileMenuRef}
+        closeButtonRef={mobileMenuCloseRef}
+        onOpen={() => setMobileMenuOpen(true)}
+        onClose={() => setMobileMenuOpen(false)}
+      />
 
-      <aside
-        aria-label="Navegacion principal"
-        className="fixed inset-y-0 left-0 hidden w-72 border-r border-clancy-line/80 bg-clancy-surface/88 p-6 backdrop-blur-md md:flex md:flex-col"
-      >
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-clancy-trench">
-          Secure Panel
-        </p>
-        <h1 className="mt-2 font-mono text-xl tracking-[0.08em] text-clancy-ink">
-          Clancy Dashboard
-        </h1>
-        <nav aria-label="Secciones del dashboard" className="mt-8 space-y-2">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <a
-                key={item.id}
-                href={item.href}
-                className="group flex items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/70 hover:text-clancy-ink hover:shadow-[0_0_16px_rgba(255,46,46,0.22)] focus-visible:border-clancy-trench focus-visible:text-clancy-ink focus-visible:shadow-[0_0_16px_rgba(252,227,0,0.18)]"
-              >
-                <Icon className="h-4 w-4 text-clancy-trench transition-all duration-300 group-hover:text-clancy-fire" />
-                <span>{item.label}</span>
-              </a>
-            );
-          })}
-        </nav>
-        <a
-          href="/consola"
-          className="mt-4 flex items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-trench hover:text-clancy-ink hover:shadow-[0_0_16px_rgba(252,227,0,0.28)] focus-visible:border-clancy-trench focus-visible:text-clancy-ink focus-visible:shadow-[0_0_16px_rgba(252,227,0,0.18)]"
-        >
-          <Command className="h-4 w-4 text-clancy-trench transition-all duration-300" />
-          <span>Abrir Consola</span>
-        </a>
-        <p className="mt-2 font-mono text-[11px] text-zinc-500">
-          Atajo: Ctrl + Shift + T
-        </p>
-      </aside>
-
-      {mobileMenuOpen ? (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <button
-            type="button"
-            className="absolute inset-0 bg-[#101317]/86"
-            aria-label="Cerrar menu"
-            onClick={() => setMobileMenuOpen(false)}
-          />
-          <aside
-            ref={mobileMenuRef}
-            aria-label="Navegacion movil"
-            className="relative h-full w-80 max-w-[88vw] border-r border-clancy-line/80 bg-clancy-surface/92 p-6 backdrop-blur-md"
-          >
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="font-mono text-lg tracking-[0.08em] text-clancy-ink">
-                Menu Seguro
-              </h2>
-              <button
-                ref={mobileMenuCloseRef}
-                type="button"
-                className="rounded border border-clancy-line/75 bg-clancy-raised/75 p-1 text-clancy-muted transition-all duration-300 hover:border-clancy-fire/60 hover:text-clancy-fire hover:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
-                onClick={() => setMobileMenuOpen(false)}
-                aria-label="Cerrar menu lateral"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            <nav aria-label="Secciones del dashboard" className="space-y-2">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <a
-                    key={item.id}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/70 hover:text-clancy-ink hover:shadow-[0_0_14px_rgba(255,46,46,0.2)] focus-visible:border-clancy-trench focus-visible:text-clancy-ink focus-visible:shadow-[0_0_14px_rgba(252,227,0,0.18)]"
-                  >
-                    <Icon className="h-4 w-4 text-clancy-trench transition-all duration-300" />
-                    <span>{item.label}</span>
-                  </a>
-                );
-              })}
-            </nav>
-            <a
-              href="/consola"
-              onClick={() => setMobileMenuOpen(false)}
-              className="mt-4 flex w-full items-center gap-3 rounded-md border border-clancy-line/75 bg-clancy-raised/75 px-3 py-2 text-sm text-clancy-muted backdrop-blur-md transition-all duration-300 hover:border-clancy-trench hover:text-clancy-ink hover:shadow-[0_0_14px_rgba(252,227,0,0.22)] focus-visible:border-clancy-trench focus-visible:text-clancy-ink focus-visible:shadow-[0_0_14px_rgba(252,227,0,0.18)]"
-            >
-              <Command className="h-4 w-4 text-clancy-trench transition-all duration-300" />
-              <span>Abrir Consola</span>
-            </a>
-            <p className="mt-2 font-mono text-[11px] text-zinc-500">
-              Atajo: Ctrl + Shift + T
-            </p>
-          </aside>
-        </div>
-      ) : null}
+      <SidebarNavigation />
 
       <main id="main-content" tabIndex={-1} className="md:pl-72">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-4 pt-20 sm:p-6 sm:pt-24 md:p-10 md:pt-10">
@@ -410,63 +212,15 @@ export default function SecureDashboard() {
         </div>
       </main>
 
-      <AnimatePresence>
-        {terminalOpen ? (
-          <>
-            <motion.button
-              type="button"
-              aria-label="Cerrar consola"
-              className="fixed inset-0 z-50 bg-[#101317]/84"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setTerminalOpen(false)}
-            />
-            <motion.section
-              ref={terminalDialogRef}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="advanced-console-title"
-              className="fixed left-1/2 top-1/2 z-[60] w-[92vw] max-w-3xl -translate-x-1/2 -translate-y-1/2"
-              initial={{ opacity: 0, y: 18, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 18, scale: 0.98 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-            >
-              <div className="mb-3 flex items-center justify-between rounded-md border border-clancy-line/80 bg-clancy-surface/90 px-3 py-2 backdrop-blur-md">
-                <div>
-                  <p className="font-mono text-xs uppercase tracking-[0.15em] text-clancy-trench">
-                    Consola Avanzada
-                  </p>
-                  <p
-                    id="advanced-console-title"
-                    className="text-xs text-gray-300"
-                  >
-                    Extra opcional para usuarios avanzados
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  {secretFound ? (
-                    <span className="rounded-full border border-clancy-trench/70 bg-clancy-trench/15 px-2 py-1 font-mono text-[11px] uppercase text-clancy-trench">
-                      Secreto desbloqueado
-                    </span>
-                  ) : null}
-                  <button
-                    ref={terminalCloseRef}
-                    type="button"
-                    aria-label="Cerrar consola avanzada"
-                    onClick={() => setTerminalOpen(false)}
-                    className="rounded border border-clancy-line/75 bg-clancy-raised/75 p-1 text-clancy-muted transition-all duration-300 hover:border-clancy-fire/60 hover:text-clancy-fire hover:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-              <TerminalInterface onSecretUnlocked={() => setSecretFound(true)} />
-            </motion.section>
-          </>
-        ) : null}
-      </AnimatePresence>
+      <AdvancedTerminalDialog
+        isOpen={terminalOpen}
+        secretFound={secretFound}
+        dialogRef={terminalDialogRef}
+        closeButtonRef={terminalCloseRef}
+        onClose={() => setTerminalOpen(false)}
+      >
+        <TerminalInterface onSecretUnlocked={() => setSecretFound(true)} />
+      </AdvancedTerminalDialog>
     </div>
   );
 }

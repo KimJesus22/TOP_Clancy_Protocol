@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { FormEvent, useState } from "react";
 import {
@@ -9,6 +10,7 @@ import {
 } from "@/src/lib/supabaseClient";
 
 export default function BanditoLogin() {
+  const router = useRouter();
   const [authMode, setAuthMode] = useState<"magic" | "password" | "register">("magic");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,6 +75,11 @@ export default function BanditoLogin() {
           : "Registro creado. Verifica tu correo para confirmar la cuenta.",
     );
     setIsSubmitting(false);
+
+    if (authMode === "password") {
+      router.push("/classified");
+      router.refresh();
+    }
   };
 
   return (

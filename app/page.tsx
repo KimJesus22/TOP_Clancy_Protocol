@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import SecureDashboard from "./components/SecureDashboard";
+import SecureDashboard from "@/app/components/SecureDashboard";
 import { buildPageMetadata } from "@/src/lib/metadata";
 import { buildHomeStructuredData, jsonLdScriptProps } from "@/src/lib/structured-data";
 

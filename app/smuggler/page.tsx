@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { buildPageMetadata } from "@/src/lib/metadata";
-import SmugglerStorefront from "./SmugglerStorefront";
+import SmugglerStorefront from "@/app/smuggler/SmugglerStorefront";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Tienda de Contrabando",

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import { topAlbums } from "../../lib/data/albums";
+import { topAlbums } from "@/lib/data/albums";
 
 const containerVariants = {
   hidden: {},

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import WalletAnalytics from "./WalletAnalytics";
+import WalletAnalytics from "@/app/admin/analytics/WalletAnalytics";
 import {
   banditoWalletUsers,
   recentWalletTransactions,
-} from "./mockWalletAnalytics";
+} from "@/app/admin/analytics/mockWalletAnalytics";
 import { buildPageMetadata } from "@/src/lib/metadata";
 
 export const metadata: Metadata = buildPageMetadata({

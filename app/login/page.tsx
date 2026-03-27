@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import BanditoLogin from "../components/BanditoLogin";
+import BanditoLogin from "@/app/components/BanditoLogin";
 import { buildPageMetadata } from "@/src/lib/metadata";
 
 export const metadata: Metadata = buildPageMetadata({

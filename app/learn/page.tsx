@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BookOpen, Shield, Terminal, ArrowLeft } from "lucide-react";
-import LearnLessonHub from "../components/LearnLessonHub";
+import LearnLessonHub from "@/app/components/LearnLessonHub";
 import { topLessons } from "@/src/lib/data/lessons";
 import { buildPageMetadata } from "@/src/lib/metadata";
 

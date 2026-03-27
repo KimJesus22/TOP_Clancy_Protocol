@@ -8,7 +8,7 @@ import {
   RECOVERED_EVIDENCE,
   RecoveredEvidence,
   EvidenceBadge,
-} from "../data/evidenceGrid";
+} from "@/app/data/evidenceGrid";
 import { getFocusableElements, trapFocusInContainer } from "@/src/lib/accessibility";
 
 function badgeStyles(badge: EvidenceBadge) {

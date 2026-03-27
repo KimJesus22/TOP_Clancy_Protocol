@@ -1,6 +1,6 @@
 "use client";
 
-import WalletIndicator from "../components/WalletIndicator";
+import WalletIndicator from "@/app/components/WalletIndicator";
 import { useTrenchWalletStore } from "@/src/store/trenchWalletStore";
 
 const BLURRYFACE_COST = 200;

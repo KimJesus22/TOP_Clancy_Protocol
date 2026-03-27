@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Command, LogIn, ShieldAlert } from "lucide-react";
-import TerminalInterface from "../components/TerminalInterface";
+import TerminalInterface from "@/app/components/TerminalInterface";
 import { buildPageMetadata } from "@/src/lib/metadata";
 
 export const dynamic = "force-static";

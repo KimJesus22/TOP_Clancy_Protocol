@@ -1,7 +1,7 @@
 "use client";
 
 import { Pause, Play, SkipForward, Volume2 } from "lucide-react";
-import { ChangeEvent, useEffect, useRef } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useDemaRadioStore } from "@/src/store/demaRadioStore";
 
 function formatTime(value: number) {
@@ -13,6 +13,7 @@ function formatTime(value: number) {
 
 export default function DemaRadioPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [audioUnavailable, setAudioUnavailable] = useState(false);
 
   const {
     tracks,
@@ -43,6 +44,12 @@ export default function DemaRadioPlayer() {
     const audio = audioRef.current;
     if (!audio) return;
 
+    if (audioUnavailable) {
+      audio.pause();
+      setPlaying(false);
+      return;
+    }
+
     audio.load();
 
     if (!isPlaying) return;
@@ -50,11 +57,16 @@ export default function DemaRadioPlayer() {
     void audio.play().catch(() => {
       setPlaying(false);
     });
-  }, [currentTrackIndex, isPlaying, setPlaying]);
+  }, [audioUnavailable, currentTrackIndex, isPlaying, setPlaying]);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+
+    if (audioUnavailable) {
+      setPlaying(false);
+      return;
+    }
 
     if (isPlaying) {
       void audio.play().catch(() => {
@@ -64,7 +76,7 @@ export default function DemaRadioPlayer() {
     }
 
     audio.pause();
-  }, [isPlaying, setPlaying]);
+  }, [audioUnavailable, isPlaying, setPlaying]);
 
   const handleVolume = (event: ChangeEvent<HTMLInputElement>) => {
     setVolume(Number(event.target.value));
@@ -85,9 +97,14 @@ export default function DemaRadioPlayer() {
       <audio
         ref={audioRef}
         src={currentTrack.src}
+        preload="none"
         onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
         onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
         onEnded={playNext}
+        onError={() => {
+          setAudioUnavailable(true);
+          setPlaying(false);
+        }}
       />
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-3 md:px-6">
@@ -96,7 +113,11 @@ export default function DemaRadioPlayer() {
             <p className="truncate font-mono text-sm text-white">
               {currentTrack.title}
             </p>
-            <p className="truncate text-xs text-gray-300">{currentTrack.artist}</p>
+            <p className="truncate text-xs text-gray-300">
+              {audioUnavailable
+                ? "Transmision no disponible en este entorno"
+                : currentTrack.artist}
+            </p>
           </div>
 
           <div className="flex items-center gap-2">

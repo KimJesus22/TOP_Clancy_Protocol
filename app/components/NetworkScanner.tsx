@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Code2, Server, Shield } from "lucide-react";
 import { useMemo, useState } from "react";
-import { NETWORK_SCAN_DATA } from "../data/networkScanner";
+import { NETWORK_SCAN_DATA } from "@/app/data/networkScanner";
 
 const categoryMeta = {
   "CMS & Servidores": { icon: Server, color: "text-clancy-fire" },

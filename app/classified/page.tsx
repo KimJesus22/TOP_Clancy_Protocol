@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { buildPageMetadata } from "@/src/lib/metadata";
-import InterceptedMessages from "./InterceptedMessages";
+import InterceptedMessages from "@/app/classified/InterceptedMessages";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Expedientes Clasificados",

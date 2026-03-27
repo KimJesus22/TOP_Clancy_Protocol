@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   DIGITAL_EVIDENCE_LOCKER,
   EvidenceRecord,
-} from "../data/digitalEvidenceLocker";
+} from "@/app/data/digitalEvidenceLocker";
 import { getFocusableElements, trapFocusInContainer } from "@/src/lib/accessibility";
 
 export default function DigitalEvidenceLocker() {

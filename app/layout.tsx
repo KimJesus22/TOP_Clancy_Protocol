@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Fira_Code, Inter, Noto_Sans_JP, Noto_Sans_KR } from "next/font/google";
 import { metadataBaseUrl } from "@/src/lib/metadata";
-import DemaRadioPlayer from "./components/DemaRadioPlayer";
-import ThemeApplier from "./components/ThemeApplier";
+import DemaRadioPlayer from "@/app/components/DemaRadioPlayer";
+import ThemeApplier from "@/app/components/ThemeApplier";
 import "./globals.css";
 
 const inter = Inter({

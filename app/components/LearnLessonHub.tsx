@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from "react";
 import type { LyricChallenge } from "@/src/lib/data/lessons";
-import LanguageSelector from "./LanguageSelector";
-import LyricQuizEngine from "./LyricQuizEngine";
+import LanguageSelector from "@/app/components/LanguageSelector";
+import LyricQuizEngine from "@/app/components/LyricQuizEngine";
 
 type LearnLessonHubProps = {
   lessons: LyricChallenge[];

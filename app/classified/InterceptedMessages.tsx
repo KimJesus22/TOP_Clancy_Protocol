@@ -1,6 +1,6 @@
 import { createSupabaseServerClient } from "@/src/lib/supabaseServer";
-import ColorDecryptor from "./ColorDecryptor";
-import KeonsFirewall from "./KeonsFirewall";
+import ColorDecryptor from "@/app/classified/ColorDecryptor";
+import KeonsFirewall from "@/app/classified/KeonsFirewall";
 
 type InterceptRecord = {
   id: number;
