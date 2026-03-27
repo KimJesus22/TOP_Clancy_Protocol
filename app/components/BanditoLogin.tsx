@@ -59,6 +59,7 @@ export default function BanditoLogin() {
           <button
             type="button"
             onClick={() => setAuthMode("magic")}
+            aria-pressed={authMode === "magic"}
             className={`rounded-md border px-3 py-1.5 text-xs transition-all duration-300 ${
               authMode === "magic"
                 ? "border-clancy-trench bg-clancy-trench/15 text-clancy-trench"
@@ -70,6 +71,7 @@ export default function BanditoLogin() {
           <button
             type="button"
             onClick={() => setAuthMode("password")}
+            aria-pressed={authMode === "password"}
             className={`rounded-md border px-3 py-1.5 text-xs transition-all duration-300 ${
               authMode === "password"
                 ? "border-clancy-fire bg-clancy-fire/15 text-clancy-fire"
@@ -81,6 +83,7 @@ export default function BanditoLogin() {
           <button
             type="button"
             onClick={() => setAuthMode("register")}
+            aria-pressed={authMode === "register"}
             className={`rounded-md border px-3 py-1.5 text-xs transition-all duration-300 ${
               authMode === "register"
                 ? "border-clancy-fire bg-clancy-fire/15 text-clancy-fire"

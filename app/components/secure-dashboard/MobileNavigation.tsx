@@ -25,6 +25,8 @@ export default function MobileNavigation({
         ref={triggerRef}
         type="button"
         aria-label="Abrir menu"
+        aria-expanded={isOpen}
+        aria-controls="mobile-navigation-panel"
         className="fixed left-4 top-4 z-50 rounded-md border border-clancy-line/80 bg-clancy-surface/90 p-2 text-clancy-ink backdrop-blur-md transition-all duration-300 hover:border-clancy-fire/60 hover:text-clancy-fire hover:shadow-[0_0_14px_rgba(255,46,46,0.25)] md:hidden"
         onClick={onOpen}
       >
@@ -40,6 +42,7 @@ export default function MobileNavigation({
             onClick={onClose}
           />
           <aside
+            id="mobile-navigation-panel"
             ref={panelRef}
             aria-label="Navegacion movil"
             className="relative h-full w-80 max-w-[88vw] border-r border-clancy-line/80 bg-clancy-surface/92 p-6 backdrop-blur-md"

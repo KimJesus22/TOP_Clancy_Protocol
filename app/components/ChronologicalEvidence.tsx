@@ -126,6 +126,8 @@ export default function ChronologicalEvidence() {
           const spotifyAlbum = spotifyAlbums[album.spotifyEmbedId];
           const hasSpotifyMetadata = Boolean(spotifyAlbum);
           const shouldResolveSpotify = isLikelySpotifyAlbumId(album.spotifyEmbedId);
+          const isExpanded = expandedAlbumId === album.id;
+          const detailsPanelId = `${album.id}-details`;
 
           return (
             <motion.li
@@ -147,9 +149,9 @@ export default function ChronologicalEvidence() {
 
               <button
                 type="button"
-                onClick={() =>
-                  setExpandedAlbumId((prev) => (prev === album.id ? null : album.id))
-                }
+                aria-expanded={isExpanded}
+                aria-controls={detailsPanelId}
+                onClick={() => setExpandedAlbumId((prev) => (prev === album.id ? null : album.id))}
                 className="w-full text-left"
               >
                 <div className="flex flex-wrap items-center justify-between gap-3">
@@ -192,11 +194,15 @@ export default function ChronologicalEvidence() {
               </button>
 
               <motion.div
+                id={detailsPanelId}
+                role="region"
+                aria-label={`Detalles del album ${album.title}`}
                 initial={false}
                 animate={{
-                  height: expandedAlbumId === album.id ? "auto" : 0,
-                  opacity: expandedAlbumId === album.id ? 1 : 0,
+                  height: isExpanded ? "auto" : 0,
+                  opacity: isExpanded ? 1 : 0,
                 }}
+                aria-hidden={!isExpanded}
                 className="overflow-hidden"
               >
                 <div className="mt-4 space-y-4">
@@ -328,7 +334,7 @@ export default function ChronologicalEvidence() {
                     <p className="mb-2 font-mono text-xs uppercase tracking-[0.12em] text-clancy-trench">
                       Spotify Relay
                     </p>
-                    {expandedAlbumId === album.id ? (
+                    {isExpanded ? (
                       <div className="rounded-md border border-clancy-line/75 bg-clancy-canvas p-1 opacity-100 saturate-100 transition">
                         <iframe
                           title={`Reproductor embebido de Spotify para el album ${album.title}`}

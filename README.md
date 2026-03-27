@@ -282,6 +282,10 @@ The public console is optional and does not block the main navigation.
 - Landmarks explicitos en la navegacion principal, menu movil y `main`.
 - Estados `focus-visible` para enlaces, botones e inputs.
 - Navegacion lateral, acciones de decodificacion y accesos rapidos compatibles con `Tab` / `Enter`.
+- Los controles con estado expuesto a usuario ahora anuncian ese estado con atributos ARIA como `aria-expanded`, `aria-controls` y `aria-pressed`.
+- El menu movil expone apertura/cierre a tecnologias de asistencia.
+- La timeline de albumes expone sus paneles expandibles como regiones controladas por acordeon.
+- El selector de modo de autenticacion en `BanditoLogin` comunica que opcion esta activa.
 - Los iframes de video muestran señal visual en su contenedor cuando reciben foco por teclado.
 - Los overlays interactivos usan `role="dialog"` y `aria-modal="true"` para mejorar lectura con tecnologias de asistencia.
 - El foco se mueve al primer control util cuando se abre un panel o modal, se mantiene atrapado dentro con `Tab`, permite cierre con `Escape` y regresa al disparador al cerrar.
