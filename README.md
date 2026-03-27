@@ -11,8 +11,10 @@ An interactive cybersecurity-themed Dashboard inspired by the Twenty One Pilots 
 - Framer Motion
 - Lucide React
 - next-sitemap
+- SWR
 - Zustand
 - Supabase (`@supabase/supabase-js`, `@supabase/ssr`)
+- Jest + Testing Library
 
 ## Descripcion del proyecto / Project Description
 
@@ -47,6 +49,25 @@ It also includes hidden tools for technical users, such as an advanced console w
 - Estructura tipada con TypeScript (`AlbumRecord`) para evitar costos de servidor.
 - Incluye metadatos de albumes: estado, nivel de amenaza DEMA, color y `spotifyEmbedId`.
 - Scripts SQL versionados en `supabase/` para schema y seed de lore.
+
+## Arquitectura de componentes
+
+- `SecureDashboard` fue descompuesto en subcomponentes para reducir complejidad y facilitar mantenimiento.
+- La navegacion lateral vive en `app/components/secure-dashboard/SidebarNavigation.tsx`.
+- El menu movil vive en `app/components/secure-dashboard/MobileNavigation.tsx`.
+- La consola avanzada modal vive en `app/components/secure-dashboard/AdvancedTerminalDialog.tsx`.
+- Los placeholders de carga reutilizables viven en `app/components/secure-dashboard/SectionSkeleton.tsx`.
+- El atajo `Ctrl + Shift + T` fue movido al hook `src/hooks/useTerminalShortcut.ts`.
+- La gestion reutilizable de foco en overlays fue movida al hook `src/hooks/useOverlayFocusTrap.ts`.
+- La autenticacion del formulario fue abstraida a `src/hooks/useAuth.ts`, permitiendo que `BanditoLogin` se concentre en UI, mensajes y estados de carga.
+
+## Alias de importacion
+
+- El proyecto usa alias `@/` para imports internos en lugar de rutas relativas profundas.
+- `tsconfig.json` define `baseUrl: "."` y mantiene el mapeo `@/*`.
+- Ejemplo recomendado:
+  - `import { topAlbums } from "@/lib/data/albums"`
+- Esta convencion se aplica tanto en imports estaticos como en `next/dynamic`.
 
 ## Terminal oculta / Hidden Terminal
 
@@ -93,6 +114,8 @@ The public console is optional and does not block the main navigation.
 
 - Cliente browser en `src/lib/supabaseClient.ts`.
 - Cliente server SSR con cookies en `src/lib/supabaseServer.ts`.
+- Ambos clientes usan un schema `Database` tipado en `src/lib/supabaseTypes.ts`.
+- El tipado actual cubre las tablas `dema_messages` y `dema_intercepts`, mejorando autocompletado y validacion de columnas.
 - Ruta protegida `/classified`:
   - valida sesion autenticada
   - consulta `dema_intercepts`
@@ -100,6 +123,8 @@ The public console is optional and does not block the main navigation.
 - Ruta publica `/login`:
   - expone el formulario `BanditoLogin`
   - envia Magic Link para acceso autenticado
+  - soporta login por email/password y registro mediante el hook `useAuth`
+  - redirige a `/classified` tras autenticacion exitosa por password
 - Lore en tiempo real con `LoreDecryptor` sobre tabla `dema_messages`.
 - Si la conexion al feed de `dema_messages` falla, `LoreDecryptor` no rompe la UI:
   - traduce errores de red como `Failed to fetch` a mensajes legibles
@@ -118,6 +143,7 @@ The public console is optional and does not block the main navigation.
 
 - La timeline tambien puede consultar metadata real de Spotify mediante la ruta server-side `app/api/spotify/albums/route.ts`.
 - El cliente usa `SPOTIFY_CLIENT_ID` y `SPOTIFY_CLIENT_SECRET` solo en servidor mediante flujo `client_credentials`.
+- El fetching del lado cliente usa `useSWR('/api/spotify/albums?ids=...')` para cachear respuestas, deduplicar solicitudes y simplificar el manejo declarativo de carga/error.
 - Cuando el `spotifyEmbedId` es valido, la UI muestra portada, artistas, fecha de lanzamiento, numero de tracks y enlace directo a Spotify.
 - Si la consulta falla, la timeline conserva el embed y hace fallback visual sin romper la experiencia.
 
@@ -204,6 +230,22 @@ The public console is optional and does not block the main navigation.
   - `opengraph-image`
 - `/` y `/expedientes` reciben prioridad superior dentro del sitemap.
 - Para produccion conviene definir `NEXT_PUBLIC_SITE_URL` con el dominio publico real, evitando que sitemap y metadata usen `http://localhost:3000`.
+
+## Testing
+
+- El proyecto incluye pruebas unitarias con Jest y React Testing Library.
+- Configuracion principal:
+  - `jest.config.mjs`
+  - `jest.setup.ts`
+- Casos cubiertos actualmente:
+  - `tests/TerminalInterface.test.tsx`
+    - valida respuesta a comandos soportados
+    - valida desbloqueo del secreto `vialism`
+  - `tests/trenchWalletStore.test.ts`
+    - valida que `redeemCode` incremente creditos
+    - evita duplicar recompensas al reutilizar un codigo
+- Script disponible:
+  - `corepack pnpm test`
 
 ## Lore PDF Integration
 
