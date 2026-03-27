@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Code2, Server, Shield } from "lucide-react";
 import { useMemo, useState } from "react";
 import { NETWORK_SCAN_DATA } from "@/app/data/networkScanner";
@@ -16,6 +16,7 @@ type ScanState = "idle" | "scanning" | "done";
 export default function NetworkScanner() {
   const [scanState, setScanState] = useState<ScanState>("idle");
   const [visibleCount, setVisibleCount] = useState(0);
+  const shouldReduceMotion = useReducedMotion();
 
   const isRunning = scanState === "scanning";
   const isReady = scanState === "done";
@@ -73,9 +74,9 @@ export default function NetworkScanner() {
           return (
             <motion.article
               key={tech.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.25 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+              animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+              transition={shouldReduceMotion ? undefined : { duration: 0.25 }}
               className="relative overflow-hidden rounded-md border border-clancy-line/85 bg-gradient-to-b from-clancy-raised/94 to-clancy-surface/92 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_10px_24px_rgba(0,0,0,0.2)] backdrop-blur-md"
             >
               <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/6" />
@@ -91,11 +92,16 @@ export default function NetworkScanner() {
               <div className="h-2 w-full overflow-hidden rounded bg-clancy-canvas/90 ring-1 ring-white/5">
                 <motion.div
                   className="h-full bg-clancy-fire"
-                  initial={{ width: "0%" }}
-                  animate={{
+                  initial={shouldReduceMotion ? false : { width: "0%" }}
+                  animate={shouldReduceMotion ? undefined : {
                     width: isRunning || isReady ? "100%" : "0%",
                   }}
-                  transition={{ duration: 0.9, ease: "easeOut" }}
+                  transition={shouldReduceMotion ? undefined : { duration: 0.9, ease: "easeOut" }}
+                  style={
+                    shouldReduceMotion
+                      ? { width: isRunning || isReady ? "100%" : "0%" }
+                      : undefined
+                  }
                 />
               </div>
               <p className="mt-2 font-mono text-xs text-clancy-trench">

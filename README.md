@@ -45,8 +45,10 @@ It also includes hidden tools for technical users, such as an advanced console w
 
 ## Datos locales / Local Static Data
 
-- Base de datos estatica local en `lib/data/albums.ts`.
-- Estructura tipada con TypeScript (`AlbumRecord`) para evitar costos de servidor.
+- El catalogo editorial de albumes vive en `public/data/albums.json`.
+- `lib/data/albums.ts` mantiene la capa tipada (`AlbumRecord`) y centraliza el acceso al dataset.
+- Esto separa contenido y presentacion: los textos bilingues, colores y relaciones de lore ya no viven incrustados en el componente o en un array TypeScript gigante.
+- Como el dataset ahora es JSON estatico dentro del repo, resulta mas facil migrarlo despues a Supabase o a un panel editorial sin reescribir la UI.
 - Incluye metadatos de albumes: estado, nivel de amenaza DEMA, color y `spotifyEmbedId`.
 - Scripts SQL versionados en `supabase/` para schema y seed de lore.
 
@@ -143,7 +145,9 @@ The public console is optional and does not block the main navigation.
 
 - La timeline tambien puede consultar metadata real de Spotify mediante la ruta server-side `app/api/spotify/albums/route.ts`.
 - El cliente usa `SPOTIFY_CLIENT_ID` y `SPOTIFY_CLIENT_SECRET` solo en servidor mediante flujo `client_credentials`.
+- La ruta `/api/spotify/albums` reutiliza un token de Spotify en cache de memoria y devuelve `Cache-Control: s-maxage=3600, stale-while-revalidate=86400`.
 - El fetching del lado cliente usa `useSWR('/api/spotify/albums?ids=...')` para cachear respuestas, deduplicar solicitudes y simplificar el manejo declarativo de carga/error.
+- El `fetch` del cliente usa `cache: "no-store"` para no depender del cache implicito del navegador; la estrategia de cache queda concentrada en SWR y en el API route.
 - Cuando el `spotifyEmbedId` es valido, la UI muestra portada, artistas, fecha de lanzamiento, numero de tracks y enlace directo a Spotify.
 - Si la consulta falla, la timeline conserva el embed y hace fallback visual sin romper la experiencia.
 
@@ -158,6 +162,9 @@ The public console is optional and does not block the main navigation.
 - La home y la consola demo priorizan carga estatica donde es posible; los datos de Spotify se consultan por ruta server-side con fallback para no romper la renderizacion.
 - La home ahora divide codigo con `next/dynamic` para modulos pesados por debajo del primer scroll.
 - Se reservaron alturas de carga para varios bloques y reproductores, reduciendo riesgo de `CLS`.
+- Los iframes de Spotify ya no se montan en todos los albumes por defecto; ahora se renderizan solo al expandir cada expediente.
+- Los iframes de YouTube en `BroadcastGallery` se montan solo cuando entran en viewport y mantienen placeholder con altura fija.
+- Varias animaciones se degradan con `prefers-reduced-motion`, reduciendo trabajo inicial de pintura y scripting.
 - Mejora medida en build para `/`:
   - antes: `29.6 kB` y `293 kB First Load JS`
   - despues: `20.3 kB` y `233 kB First Load JS`

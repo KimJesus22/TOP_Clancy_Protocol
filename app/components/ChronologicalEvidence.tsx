@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import useSWR from "swr";
@@ -43,7 +43,12 @@ function isLikelySpotifyAlbumId(value: string) {
 }
 
 async function spotifyAlbumsFetcher(url: string) {
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    cache: "no-store",
+    headers: {
+      Accept: "application/json",
+    },
+  });
 
   if (!response.ok) {
     throw new Error(`Spotify metadata request failed with ${response.status}.`);
@@ -54,6 +59,7 @@ async function spotifyAlbumsFetcher(url: string) {
 
 export default function ChronologicalEvidence() {
   const [expandedAlbumId, setExpandedAlbumId] = useState<string | null>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const spotifyAlbumIds = useMemo(
     () =>
@@ -99,8 +105,8 @@ export default function ChronologicalEvidence() {
       <motion.ol
         className="relative ml-3 space-y-6 border-l border-zinc-700/70 pl-6"
         variants={containerVariants}
-        initial="hidden"
-        whileInView="show"
+        initial={shouldReduceMotion ? false : "hidden"}
+        whileInView={shouldReduceMotion ? undefined : "show"}
         viewport={{ once: true, amount: 0.2 }}
       >
         {topAlbums.map((album) => {
@@ -309,24 +315,24 @@ export default function ChronologicalEvidence() {
                     <p className="mb-2 font-mono text-xs uppercase tracking-[0.12em] text-clancy-trench">
                       Spotify Relay
                     </p>
-                    <div
-                      className={`rounded-md border border-clancy-line/75 bg-clancy-canvas p-1 transition ${
-                        expandedAlbumId === album.id
-                          ? "opacity-100 saturate-100"
-                          : "opacity-60 saturate-50"
-                      }`}
-                    >
-                      <iframe
-                        title={`Reproductor embebido de Spotify para el album ${album.title}`}
-                        src={`https://open.spotify.com/embed/album/${album.spotifyEmbedId}?utm_source=generator`}
-                        width="100%"
-                        height="152"
-                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                        loading="lazy"
-                        className="w-full rounded-md"
-                        style={{ filter: "brightness(0.92) contrast(0.95)" }}
-                      />
-                    </div>
+                    {expandedAlbumId === album.id ? (
+                      <div className="rounded-md border border-clancy-line/75 bg-clancy-canvas p-1 opacity-100 saturate-100 transition">
+                        <iframe
+                          title={`Reproductor embebido de Spotify para el album ${album.title}`}
+                          src={`https://open.spotify.com/embed/album/${album.spotifyEmbedId}?utm_source=generator`}
+                          width="100%"
+                          height="152"
+                          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                          loading="lazy"
+                          className="w-full rounded-md"
+                          style={{ filter: "brightness(0.92) contrast(0.95)" }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="rounded-md border border-dashed border-clancy-line/70 bg-clancy-canvas/70 px-4 py-6 text-sm text-clancy-muted">
+                        El reproductor se carga solo al expandir este expediente para reducir trabajo inicial.
+                      </div>
+                    )}
                   </div>
                 </div>
               </motion.div>
