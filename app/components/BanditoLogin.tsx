@@ -1,85 +1,36 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { FormEvent, useState } from "react";
-import {
-  isSupabaseConfigured,
-  supabase,
-  supabaseConfigError,
-} from "@/src/lib/supabaseClient";
+import { useAuth } from "@/src/hooks/useAuth";
 
 export default function BanditoLogin() {
-  const router = useRouter();
+  const { isSubmitting, isSupabaseConfigured, signInWithEmail, signInWithMagicLink, register } =
+    useAuth();
   const [authMode, setAuthMode] = useState<"magic" | "password" | "register">("magic");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!supabase) {
-      setError(supabaseConfigError ?? "Supabase no configurado.");
-      return;
-    }
-
-    setIsSubmitting(true);
     setMessage(null);
     setError(null);
 
-    const redirectTo =
-      typeof window !== "undefined"
-        ? `${window.location.origin}/classified`
-        : undefined;
-
-    const authError =
+    const result =
       authMode === "magic"
-        ? (
-            await supabase.auth.signInWithOtp({
-              email,
-              options: {
-                emailRedirectTo: redirectTo,
-              },
-            })
-          ).error
+        ? await signInWithMagicLink(email)
         : authMode === "password"
-          ? (
-              await supabase.auth.signInWithPassword({
-                email,
-                password,
-              })
-            ).error
-          : (
-              await supabase.auth.signUp({
-                email,
-                password,
-                options: {
-                  emailRedirectTo: redirectTo,
-                },
-              })
-            ).error;
+          ? await signInWithEmail(email, password)
+          : await register(email, password);
 
-    if (authError) {
-      setError(authError.message);
-      setIsSubmitting(false);
+    if (!result.success) {
+      setError(result.error ?? "No fue posible completar la autenticacion.");
       return;
     }
 
-    setMessage(
-      authMode === "magic"
-        ? "Enlace enviado. Revisa tu correo para acceder a Trench."
-        : authMode === "password"
-          ? "Sesion iniciada correctamente."
-          : "Registro creado. Verifica tu correo para confirmar la cuenta.",
-    );
-    setIsSubmitting(false);
-
-    if (authMode === "password") {
-      router.push("/classified");
-      router.refresh();
-    }
+    setMessage(result.message ?? "Operacion completada.");
   };
 
   return (
