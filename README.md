@@ -33,6 +33,7 @@ It also includes hidden tools for technical users, such as an advanced console w
 - Broadcast Gallery con videos oficiales en YouTube (iframes).
 - Network Scanner (radar de red) con progresos animados y categorias estilo Wappalyzer.
 - Trench Wallet (economia virtual) con codigos secretos y tienda de contrabando.
+- Ruta secreta `/admin/analytics` para monitoreo interno de economia Bandito.
 - Reproductor global persistente "Dema Radio Player" con estado compartido.
 - Modulo EdTech `/learn` con motor interactivo `LyricQuizEngine`.
 - Demo publica `/consola` para mostrar la terminal sin autenticacion.
@@ -74,6 +75,12 @@ The public console is optional and does not block the main navigation.
 - Recompensa por codigo valido en `DecodeChallenge`: `+50` creditos.
 - Recompensa por respuesta correcta en `LyricQuizEngine`: `+10` creditos.
 - Tienda `/smuggler` para desbloquear temas visuales (ej. `Modo Blurryface`).
+- Ruta `/admin/analytics` con datos mock de 50 usuarios Banditos y transacciones recientes.
+- Incluye utilidades TypeScript para calcular:
+  - media de saldos
+  - mediana de saldos
+  - moda de recompensas compradas
+- Los datos mock incluyen codenames como `Ghost_141` y `Sector_TXT` como easter eggs.
 
 ## Dema Radio Player (Global Audio)
 
@@ -98,6 +105,9 @@ The public console is optional and does not block the main navigation.
   - traduce errores de red como `Failed to fetch` a mensajes legibles
   - muestra fallback visual claro para usuario final
   - permite reintentar la conexion manualmente
+- La zona `/classified` incluye dos compuertas interactivas adicionales:
+  - `KeonsFirewall`, que exige resolver un limite matematico antes de mostrar el contenido
+  - `ColorDecryptor`, que exige convertir un color hexadecimal a RGB decimal exacto para desbloquear un archivo confidencial
 
 ## Spotify Embeds
 
@@ -201,6 +211,17 @@ The public console is optional and does not block the main navigation.
 - `ActClancyBriefing` resume el arco narrativo general antes de entrar al detalle.
 - `ChronologicalEvidence` ahora combina dossier narrativo ES/EN + metadata musical + embed de Spotify.
 - `EvidenceGrid` incluye expedientes nuevos para eras, personajes, ciudad, documentos y organizaciones del lore.
+
+## Modulos secretos
+
+- `KeonsFirewall` se renderiza antes del contenido clasificado y simula una terminal al borde del colapso.
+- Muestra la alerta `Sobrecarga de memoria detectada. Estabilice el núcleo resolviendo la indeterminación algorítmica`.
+- Presenta el limite `lim x→2 (x² - 4) / (x - 2)` como desafio de acceso.
+- Si el usuario responde `4`, la terminal cambia a verde, muestra `Núcleo estabilizado. Bypassing firewall...` y habilita el acceso.
+- Si falla, la terminal vibra con una animacion agresiva de error.
+- `ColorDecryptor` trabaja sobre señales hexadecimales como `#FCE300` y `#FF2E2E`.
+- El usuario debe ingresar los canales `R`, `G` y `B` correctos en decimal.
+- Si acierta, el modulo parpadea en el color objetivo y desbloquea un `Archivo Confidencial`.
 
 ## Accesibilidad y UX
 
