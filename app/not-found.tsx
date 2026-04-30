@@ -11,7 +11,7 @@ const alerts = [
 
 export default function NotFound() {
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-6">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-6 pb-48 pt-10 md:pb-44">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,46,46,0.14),transparent_40%),radial-gradient(circle_at_80%_80%,rgba(255,46,46,0.08),transparent_35%)]" />
 
       <section className="relative z-10 w-full max-w-3xl rounded-xl border border-clancy-fire/50 bg-black/70 p-8 text-center shadow-[0_0_30px_rgba(255,46,46,0.25)] backdrop-blur-md">
@@ -60,7 +60,7 @@ export default function NotFound() {
 
         <Link
           href="/"
-          className="mt-8 inline-flex rounded-md border border-clancy-fire/70 bg-clancy-fire/15 px-5 py-3 font-mono text-sm uppercase tracking-[0.08em] text-white transition-all duration-300 hover:border-clancy-trench hover:text-clancy-trench hover:shadow-[0_0_18px_rgba(252,227,0,0.28)]"
+          className="mt-8 inline-flex max-w-full rounded-md border border-clancy-fire/70 bg-clancy-fire/15 px-5 py-3 text-center font-mono text-sm uppercase tracking-[0.08em] text-white transition-all duration-300 hover:border-clancy-trench hover:text-clancy-trench hover:shadow-[0_0_18px_rgba(252,227,0,0.28)]"
         >
           Ejecutar Protocolo de Escape (Volver al Inicio)
         </Link>

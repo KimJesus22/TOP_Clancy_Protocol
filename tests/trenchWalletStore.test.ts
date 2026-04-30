@@ -31,4 +31,25 @@ describe("trenchWalletStore", () => {
     expect(useTrenchWalletStore.getState().credits).toBe(50);
     expect(useTrenchWalletStore.getState().usedCodes).toEqual(["SAHLOFOLINA"]);
   });
+
+  it("persiste creditos y codigos usados tras rehidratar el store", async () => {
+    useTrenchWalletStore.getState().redeemCode("SAHLOFOLINA");
+    useTrenchWalletStore.getState().redeemCode("KEONS");
+
+    expect(useTrenchWalletStore.getState().credits).toBe(100);
+    expect(useTrenchWalletStore.getState().usedCodes).toEqual(["SAHLOFOLINA", "KEONS"]);
+
+    const persistedWallet = localStorage.getItem("trench-wallet");
+    expect(persistedWallet).not.toBeNull();
+
+    useTrenchWalletStore.setState({
+      ...initialState,
+    });
+    localStorage.setItem("trench-wallet", persistedWallet!);
+
+    await useTrenchWalletStore.persist.rehydrate();
+
+    expect(useTrenchWalletStore.getState().credits).toBe(100);
+    expect(useTrenchWalletStore.getState().usedCodes).toEqual(["SAHLOFOLINA", "KEONS"]);
+  });
 });

@@ -1,6 +1,7 @@
 import { createSupabaseServerClient } from "@/src/lib/supabaseServer";
 import ColorDecryptor from "@/app/classified/ColorDecryptor";
 import KeonsFirewall from "@/app/classified/KeonsFirewall";
+import Link from "next/link";
 
 type InterceptRecord = {
   id: number;
@@ -11,10 +12,31 @@ type InterceptRecord = {
 
 function AccessDenied() {
   return (
-    <section className="rounded-xl border border-clancy-fire/45 bg-black/80 p-6 shadow-[0_0_24px_rgba(255,46,46,0.24)]">
+    <section className="w-full rounded-xl border border-clancy-fire/45 bg-black/80 p-6 shadow-[0_0_24px_rgba(255,46,46,0.24)]">
       <p className="font-mono text-sm uppercase tracking-[0.12em] text-clancy-fire">
         ACCESO DENEGADO - VIOLACION DE PROTOCOLO DEMA
       </p>
+      <h1 className="mt-3 font-mono text-2xl text-clancy-ink">
+        Credenciales Bandito requeridas
+      </h1>
+      <p className="mt-3 text-sm text-zinc-300">
+        Esta zona contiene intercepciones clasificadas. Inicia sesion para
+        solicitar acceso o vuelve al centro de mando publico.
+      </p>
+      <div className="mt-5 flex flex-wrap gap-3">
+        <Link
+          href="/login"
+          className="rounded-md border border-clancy-fire/60 bg-clancy-fire/10 px-4 py-2 font-mono text-sm text-clancy-fire transition hover:shadow-[0_0_14px_rgba(255,46,46,0.24)]"
+        >
+          Ir a login
+        </Link>
+        <Link
+          href="/"
+          className="rounded-md border border-clancy-line/80 bg-clancy-raised/70 px-4 py-2 font-mono text-sm text-clancy-muted transition hover:border-clancy-trench hover:text-clancy-ink"
+        >
+          Volver al inicio
+        </Link>
+      </div>
     </section>
   );
 }

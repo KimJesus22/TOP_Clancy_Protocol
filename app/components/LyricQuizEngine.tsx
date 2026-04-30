@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import type { LyricChallenge } from "@/src/lib/data/lessons";
 import { useTrenchWalletStore } from "@/src/store/trenchWalletStore";
@@ -15,7 +15,6 @@ export default function LyricQuizEngine({ lessons }: LyricQuizEngineProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [lastWrongOption, setLastWrongOption] = useState<string | null>(null);
-  const [solved, setSolved] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   const currentLesson = lessons[currentIndex];
@@ -72,23 +71,7 @@ export default function LyricQuizEngine({ lessons }: LyricQuizEngineProps) {
     );
   }
 
-  const onPickOption = (option: string) => {
-    if (solved) return;
-
-    setSelectedOption(option);
-
-    if (option === currentLesson.missingWord) {
-      addCredits(10);
-      setSolved(true);
-      setLastWrongOption(null);
-      return;
-    }
-
-    setLastWrongOption(option);
-    setTimeout(() => setLastWrongOption(null), 420);
-  };
-
-  const onNext = () => {
+  const goToNextLesson = () => {
     if (currentIndex >= lessons.length - 1) {
       setCurrentIndex(0);
     } else {
@@ -96,7 +79,19 @@ export default function LyricQuizEngine({ lessons }: LyricQuizEngineProps) {
     }
     setSelectedOption(null);
     setLastWrongOption(null);
-    setSolved(false);
+  };
+
+  const onPickOption = (option: string) => {
+    setSelectedOption(option);
+
+    if (option === currentLesson.missingWord) {
+      addCredits(10);
+      goToNextLesson();
+      return;
+    }
+
+    setLastWrongOption(option);
+    setTimeout(() => setLastWrongOption(null), 420);
   };
 
   return (
@@ -128,7 +123,6 @@ export default function LyricQuizEngine({ lessons }: LyricQuizEngineProps) {
         {currentLesson.options.map((option) => {
           const isSelected = selectedOption === option;
           const isCorrectChoice = option === currentLesson.missingWord;
-          const shouldPaintGreen = solved && isCorrectChoice;
           const shouldPaintRed = isSelected && !isCorrectChoice;
           const shouldShake = lastWrongOption === option;
 
@@ -142,9 +136,7 @@ export default function LyricQuizEngine({ lessons }: LyricQuizEngineProps) {
               }
               transition={{ duration: 0.28 }}
               className={`rounded-md border px-4 py-3 text-left font-mono text-sm transition-all duration-300 ${
-                shouldPaintGreen
-                  ? "border-green-400 bg-green-500/15 text-green-300"
-                  : shouldPaintRed
+                shouldPaintRed
                     ? "border-red-400 bg-red-500/15 text-red-300"
                     : "border-white/10 bg-black/30 text-gray-200 hover:border-clancy-trench hover:text-white"
               }`}
@@ -154,32 +146,6 @@ export default function LyricQuizEngine({ lessons }: LyricQuizEngineProps) {
           );
         })}
       </div>
-
-      <AnimatePresence mode="wait">
-        {solved ? (
-          <motion.div
-            key="success"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            className="mt-5 rounded-md border border-clancy-trench/60 bg-clancy-trench/10 p-4"
-          >
-            <p className="font-mono text-sm text-clancy-trench">
-              Transmision descifrada correctamente.
-            </p>
-            <p className="mt-2 text-sm text-gray-200">
-              {currentLesson.spanishTranslation}
-            </p>
-            <button
-              type="button"
-              onClick={onNext}
-              className="mt-4 rounded-md border border-white/10 bg-black/30 px-4 py-2 font-mono text-sm text-gray-200 transition-all duration-300 hover:border-clancy-fire hover:text-white hover:shadow-[0_0_12px_rgba(255,46,46,0.22)]"
-            >
-              Siguiente Transmision
-            </button>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
     </section>
   );
 }
