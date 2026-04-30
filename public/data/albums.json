@@ -235,5 +235,44 @@
       }
     ],
     "linkedEntities": ["Clancy", "Overcompensate", "Paladin Strait", "Banditos", "Josh", "DEMA"]
+  },
+  {
+    "id": "breach-2025",
+    "title": "Breach",
+    "releaseYear": 2025,
+    "status": "Classified",
+    "demaThreatLevel": 10,
+    "coverColor": "#B91C1C",
+    "spotifyEmbedId": "1El3k8dU3sKyoGUeuyrolH",
+    "sourceCoverage": "Detailed",
+    "summary": {
+      "es": "Breach cierra la saga conceptual iniciada en Blurryface y continuada por Trench, Scaled and Icy y Clancy. El album fue lanzado el 12 de septiembre de 2025 y presenta la ruptura final del ciclo narrativo alrededor de DEMA.",
+      "en": "Breach closes the conceptual saga that began with Blurryface and continued through Trench, Scaled and Icy, and Clancy. The album was released on September 12, 2025 and frames the final rupture of the DEMA narrative cycle."
+    },
+    "keyMoments": [
+      {
+        "es": "`City Walls` abre el album y funciona como pieza de cierre para la historia visual de Clancy, DEMA y Blurryface.",
+        "en": "`City Walls` opens the album and works as a closing piece for the visual story of Clancy, DEMA, and Blurryface."
+      },
+      {
+        "es": "`RAWFEAR`, `Drum Show` y `The Contract` expanden el conflicto desde la ansiedad, la transformacion personal y el pacto narrativo con los fans.",
+        "en": "`RAWFEAR`, `Drum Show`, and `The Contract` expand the conflict through anxiety, personal transformation, and the narrative contract with fans."
+      },
+      {
+        "es": "El tracklist de 13 canciones incluye `City Walls`, `RAWFEAR`, `Drum Show`, `Garbage`, `The Contract`, `Downstairs`, `Robot Voices`, `Center Mass`, `Cottonwood`, `One Way`, `Days Lie Dormant`, `Tally` e `Intentions`.",
+        "en": "The 13-song tracklist includes `City Walls`, `RAWFEAR`, `Drum Show`, `Garbage`, `The Contract`, `Downstairs`, `Robot Voices`, `Center Mass`, `Cottonwood`, `One Way`, `Days Lie Dormant`, `Tally`, and `Intentions`."
+      }
+    ],
+    "loreSignals": [
+      {
+        "es": "El titulo funciona como una brecha literal y simbolica: una ruptura de contencion despues del cliffhanger de `Paladin Strait`.",
+        "en": "The title works as a literal and symbolic breach: a containment break after the `Paladin Strait` cliffhanger."
+      },
+      {
+        "es": "La estetica roja y negra mantiene el pulso de Blurryface mientras recontextualiza el final de la guerra contra DEMA.",
+        "en": "The red and black visual language keeps Blurryface's pulse alive while reframing the end of the war against DEMA."
+      }
+    ],
+    "linkedEntities": ["Breach", "City Walls", "RAWFEAR", "Drum Show", "The Contract", "Blurryface", "DEMA", "Clancy"]
   }
 ]

@@ -1,8 +1,11 @@
 "use client";
 
 import { Pause, Play, SkipForward, Volume2 } from "lucide-react";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef } from "react";
 import { useDemaRadioStore } from "@/src/store/demaRadioStore";
+
+const TRACK_DURATION_SECONDS = 12;
+const TRACK_FREQUENCIES = [174, 220, 261.63];
 
 function formatTime(value: number) {
   if (!Number.isFinite(value) || value < 0) return "0:00";
@@ -12,8 +15,13 @@ function formatTime(value: number) {
 }
 
 export default function DemaRadioPlayer() {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [audioUnavailable, setAudioUnavailable] = useState(false);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const oscillatorRef = useRef<OscillatorNode | null>(null);
+  const gainRef = useRef<GainNode | null>(null);
+  const intervalRef = useRef<number | null>(null);
+  const startedAtRef = useRef<number | null>(null);
+  const offsetRef = useRef(0);
+  const currentTimeRef = useRef(0);
 
   const {
     tracks,
@@ -24,7 +32,6 @@ export default function DemaRadioPlayer() {
     duration,
     togglePlay,
     playNext,
-    setPlaying,
     setVolume,
     setCurrentTime,
     setDuration,
@@ -34,79 +41,149 @@ export default function DemaRadioPlayer() {
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
+    currentTimeRef.current = currentTime;
+  }, [currentTime]);
 
-    audio.volume = volume;
+  const stopSignal = useCallback(() => {
+    if (oscillatorRef.current) {
+      oscillatorRef.current.stop();
+      oscillatorRef.current.disconnect();
+      oscillatorRef.current = null;
+    }
+
+    if (gainRef.current) {
+      gainRef.current.disconnect();
+      gainRef.current = null;
+    }
+  }, []);
+
+  const stopProgressTimer = useCallback(() => {
+    if (intervalRef.current) {
+      window.clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, []);
+
+  const getAudioContext = useCallback(() => {
+    if (typeof window === "undefined") return null;
+    const AudioContextCtor = window.AudioContext;
+    if (!AudioContextCtor) return null;
+
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContextCtor();
+    }
+
+    return audioContextRef.current;
+  }, []);
+
+  const startSignal = useCallback(async () => {
+    const audioContext = getAudioContext();
+    if (!audioContext) return;
+
+    if (audioContext.state === "suspended") {
+      await audioContext.resume();
+    }
+
+    stopSignal();
+
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    const frequency = TRACK_FREQUENCIES[currentTrackIndex % TRACK_FREQUENCIES.length];
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+    gain.gain.setValueAtTime(Math.max(0, Math.min(volume, 1)) * 0.18, audioContext.currentTime);
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+    oscillator.start();
+
+    oscillatorRef.current = oscillator;
+    gainRef.current = gain;
+  }, [currentTrackIndex, getAudioContext, stopSignal, volume]);
+
+  useEffect(() => {
+    if (gainRef.current && audioContextRef.current) {
+      gainRef.current.gain.setValueAtTime(
+        Math.max(0, Math.min(volume, 1)) * 0.18,
+        audioContextRef.current.currentTime,
+      );
+    }
   }, [volume]);
 
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
+    setDuration(TRACK_DURATION_SECONDS);
 
-    if (audioUnavailable) {
-      audio.pause();
-      setPlaying(false);
+    if (!isPlaying) {
+      if (startedAtRef.current !== null) {
+        offsetRef.current = Math.min(currentTimeRef.current, TRACK_DURATION_SECONDS);
+      }
+      startedAtRef.current = null;
+      stopProgressTimer();
+      stopSignal();
       return;
     }
 
-    audio.load();
+    startedAtRef.current = performance.now();
+    void startSignal();
 
-    if (!isPlaying) return;
+    stopProgressTimer();
+    intervalRef.current = window.setInterval(() => {
+      if (startedAtRef.current === null) return;
 
-    void audio.play().catch(() => {
-      setPlaying(false);
-    });
-  }, [audioUnavailable, currentTrackIndex, isPlaying, setPlaying]);
+      const elapsed = offsetRef.current + (performance.now() - startedAtRef.current) / 1000;
+      const nextTime = Math.min(elapsed, TRACK_DURATION_SECONDS);
 
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
+      setCurrentTime(nextTime);
 
-    if (audioUnavailable) {
-      setPlaying(false);
-      return;
-    }
+      if (nextTime >= TRACK_DURATION_SECONDS) {
+        offsetRef.current = 0;
+        startedAtRef.current = null;
+        stopProgressTimer();
+        stopSignal();
+        playNext();
+      }
+    }, 250);
 
-    if (isPlaying) {
-      void audio.play().catch(() => {
-        setPlaying(false);
-      });
-      return;
-    }
-
-    audio.pause();
-  }, [audioUnavailable, isPlaying, setPlaying]);
+    return () => {
+      stopProgressTimer();
+      stopSignal();
+    };
+  }, [
+    currentTrackIndex,
+    isPlaying,
+    playNext,
+    setCurrentTime,
+    setDuration,
+    startSignal,
+    stopProgressTimer,
+    stopSignal,
+  ]);
 
   const handleVolume = (event: ChangeEvent<HTMLInputElement>) => {
     setVolume(Number(event.target.value));
   };
 
   const handleSeek = (event: ChangeEvent<HTMLInputElement>) => {
-    const audio = audioRef.current;
-    if (!audio || duration <= 0) return;
+    if (duration <= 0) return;
 
     const nextProgress = Number(event.target.value);
     const nextTime = (nextProgress / 100) * duration;
-    audio.currentTime = nextTime;
+    offsetRef.current = nextTime;
+    startedAtRef.current = isPlaying ? performance.now() : null;
     setCurrentTime(nextTime);
+  };
+
+  const handleNext = () => {
+    offsetRef.current = 0;
+    startedAtRef.current = null;
+    stopProgressTimer();
+    stopSignal();
+    playNext();
   };
 
   return (
     <div className="fixed bottom-0 left-0 z-[70] w-full border-t border-white/10 bg-black/40 backdrop-blur-md">
-      <audio
-        ref={audioRef}
-        src={currentTrack.src}
-        preload="none"
-        onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
-        onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
-        onEnded={playNext}
-        onError={() => {
-          setAudioUnavailable(true);
-          setPlaying(false);
-        }}
-      />
-
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-3 md:px-6">
         <div className="flex items-center justify-between gap-4">
           <div className="min-w-0">
@@ -114,9 +191,7 @@ export default function DemaRadioPlayer() {
               {currentTrack.title}
             </p>
             <p className="truncate text-xs text-gray-300">
-              {audioUnavailable
-                ? "Transmision no disponible en este entorno"
-                : currentTrack.artist}
+              {currentTrack.artist}
             </p>
           </div>
 
@@ -131,7 +206,7 @@ export default function DemaRadioPlayer() {
             </button>
             <button
               type="button"
-              onClick={playNext}
+              onClick={handleNext}
               className="rounded-full border border-white/10 bg-black/30 p-2 text-white transition-all duration-300 hover:border-clancy-trench hover:text-clancy-trench hover:shadow-[0_0_14px_rgba(252,227,0,0.24)]"
               aria-label="Siguiente pista"
             >

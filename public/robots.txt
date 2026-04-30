@@ -2,10 +2,11 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /admin/
 Disallow: /classified
 
 # Host
-Host: http://localhost:3000
+Host: https://top-clancy-protocol.vercel.app
 
 # Sitemaps
-Sitemap: http://localhost:3000/sitemap.xml
+Sitemap: https://top-clancy-protocol.vercel.app/sitemap.xml

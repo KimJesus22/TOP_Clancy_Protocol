@@ -152,6 +152,39 @@ export const RECOVERED_EVIDENCE: RecoveredEvidence[] = [
     ],
   },
   {
+    id: "breach",
+    title: "Breach",
+    type: "Album",
+    yearOrRef: "12 Sep 2025",
+    badge: "Clasificado",
+    shortDescription:
+      "Ruptura final del ciclo: cierre de la saga conceptual y respuesta al cliffhanger de Paladin Strait.",
+    details: [
+      {
+        section: "Resumen ES",
+        items: [
+          "Breach fue lanzado el 12 de septiembre de 2025 como continuacion directa de la era Clancy.",
+          "El album se presenta como cierre de la saga conceptual que conecta Blurryface, Trench, Scaled and Icy y Clancy.",
+        ],
+      },
+      {
+        section: "Summary EN",
+        items: [
+          "Breach was released on September 12, 2025 as a direct continuation of the Clancy era.",
+          "The album is framed as the conclusion of the conceptual saga connecting Blurryface, Trench, Scaled and Icy, and Clancy.",
+        ],
+      },
+      {
+        section: "Pistas clave",
+        items: [
+          "El tracklist incluye `City Walls`, `RAWFEAR`, `Drum Show`, `Garbage`, `The Contract`, `Downstairs`, `Robot Voices`, `Center Mass`, `Cottonwood`, `One Way`, `Days Lie Dormant`, `Tally` e `Intentions`.",
+          "`City Walls` concentra el cierre visual del conflicto de Clancy contra DEMA y Blurryface.",
+          "`RAWFEAR` y `Drum Show` amplian el registro emocional del final con ansiedad, exposicion y transformacion.",
+        ],
+      },
+    ],
+  },
+  {
     id: "clancy",
     title: "Clancy",
     type: "Personaje",

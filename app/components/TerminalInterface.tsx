@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -9,13 +9,20 @@ type Entry =
   | { id: string; type: "status"; threatLevel: number };
 
 const AVAILABLE_COMMANDS = [
+  "help",
+  "status",
   "open_discography",
   "decrypt_lore",
   "contact_banditos",
+  "vialism",
 ] as const;
 
 type TerminalInterfaceProps = {
   onSecretUnlocked?: () => void;
+  queuedCommand?: {
+    id: number;
+    value: string;
+  } | null;
 };
 
 function AnimatedLine({ text }: { text: string }) {
@@ -37,8 +44,17 @@ function AnimatedLine({ text }: { text: string }) {
   );
 }
 
+function createEntryId() {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+
+  return `entry-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
 export default function TerminalInterface({
   onSecretUnlocked,
+  queuedCommand,
 }: TerminalInterfaceProps) {
   const [command, setCommand] = useState("");
   const [secretUnlocked, setSecretUnlocked] = useState(false);
@@ -50,22 +66,22 @@ export default function TerminalInterface({
     },
   ]);
 
-  const pushText = (content: string) => {
+  const pushText = useCallback((content: string) => {
     setEntries((prev) => [
       ...prev,
-      { id: crypto.randomUUID(), type: "text", content },
+      { id: createEntryId(), type: "text", content },
     ]);
-  };
+  }, []);
 
-  const pushThreatStatus = () => {
+  const pushThreatStatus = useCallback(() => {
     const threatLevel = 78;
     setEntries((prev) => [
       ...prev,
-      { id: crypto.randomUUID(), type: "status", threatLevel },
+      { id: createEntryId(), type: "status", threatLevel },
     ]);
-  };
+  }, []);
 
-  const handleCommand = (rawCommand: string) => {
+  const handleCommand = useCallback((rawCommand: string) => {
     const normalized = rawCommand.trim().toLowerCase();
     if (!normalized) return;
 
@@ -100,7 +116,7 @@ ${AVAILABLE_COMMANDS.join("\n")}`);
       default:
         pushText("Comando no reconocido. Usa 'help'.");
     }
-  };
+  }, [onSecretUnlocked, pushText, pushThreatStatus, secretUnlocked]);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -108,6 +124,11 @@ ${AVAILABLE_COMMANDS.join("\n")}`);
     setCommand("");
     handleCommand(currentCommand);
   };
+
+  useEffect(() => {
+    if (!queuedCommand) return;
+    handleCommand(queuedCommand.value);
+  }, [handleCommand, queuedCommand]);
 
   return (
     <section className="w-full rounded-xl border border-white/10 bg-black/40 p-4 shadow-[0_0_20px_rgba(255,46,46,0.18)] backdrop-blur-md">
@@ -153,6 +174,12 @@ ${AVAILABLE_COMMANDS.join("\n")}`);
           autoComplete="off"
           spellCheck={false}
         />
+        <button
+          type="submit"
+          className="rounded-md border border-white/10 bg-black/30 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.08em] text-zinc-300 transition hover:border-clancy-trench hover:text-white focus-visible:border-clancy-trench focus-visible:text-white"
+        >
+          Ejecutar
+        </button>
       </form>
 
       {secretUnlocked ? (

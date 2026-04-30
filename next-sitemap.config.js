@@ -1,5 +1,5 @@
 /** @type {import('next-sitemap').IConfig} */
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://top-clancy-protocol.vercel.app";
 
 module.exports = {
   siteUrl,
@@ -8,6 +8,7 @@ module.exports = {
   autoLastmod: true,
   exclude: [
     "/api/*",
+    "/admin/*",
     "/classified",
     "/_not-found",
     "/opengraph-image",
@@ -18,7 +19,7 @@ module.exports = {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/classified"],
+        disallow: ["/api/", "/admin/", "/classified"],
       },
     ],
   },

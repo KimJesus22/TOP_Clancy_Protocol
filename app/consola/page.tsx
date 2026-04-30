@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Command, LogIn, ShieldAlert } from "lucide-react";
-import TerminalInterface from "@/app/components/TerminalInterface";
+import { ArrowLeft, LogIn } from "lucide-react";
+import ConsoleDemoClient from "@/app/consola/ConsoleDemoClient";
 import { buildPageMetadata } from "@/src/lib/metadata";
 
 export const dynamic = "force-static";
@@ -14,14 +14,6 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/consola",
   keywords: ["consola", "terminal demo", "portfolio", "clancy protocol"],
 });
-
-const samplePrompts = [
-  "help",
-  "status",
-  "decrypt_lore",
-  "contact_banditos",
-  "vialism",
-];
 
 export default function ConsolaDemoPage() {
   return (
@@ -66,49 +58,7 @@ export default function ConsolaDemoPage() {
           </nav>
         </header>
 
-        <section
-          aria-label="Experiencia principal de consola"
-          className="mt-6 grid gap-4 lg:grid-cols-[1.3fr_0.7fr]"
-        >
-          <article className="rounded-xl border border-clancy-line/80 bg-clancy-raised/78 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
-            <TerminalInterface />
-          </article>
-
-          <aside className="space-y-4">
-            <section className="rounded-xl border border-clancy-line/80 bg-clancy-raised/78 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-              <header className="flex items-center gap-2">
-                <Command className="h-4 w-4 text-clancy-trench" />
-                <h2 className="font-mono text-sm uppercase tracking-[0.16em] text-clancy-ink">
-                  Prueba rapida
-                </h2>
-              </header>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {samplePrompts.map((prompt) => (
-                  <span
-                    key={prompt}
-                    className="rounded-full border border-clancy-line/70 bg-clancy-surface/84 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.08em] text-clancy-muted"
-                  >
-                    {prompt}
-                  </span>
-                ))}
-              </div>
-            </section>
-
-            <section className="rounded-xl border border-clancy-fire/30 bg-clancy-surface/84 p-4">
-              <header className="flex items-center gap-2">
-                <ShieldAlert className="h-4 w-4 text-clancy-fire" />
-                <h2 className="font-mono text-sm uppercase tracking-[0.16em] text-clancy-ink">
-                  Nota de demo
-                </h2>
-              </header>
-              <p className="mt-3 text-sm text-clancy-muted">
-                Esta consola no accede a datos sensibles ni requiere cuenta. La
-                zona autenticada sigue disponible en <span className="font-mono">/login</span>{" "}
-                y <span className="font-mono">/classified</span>.
-              </p>
-            </section>
-          </aside>
-        </section>
+        <ConsoleDemoClient />
       </section>
     </main>
   );

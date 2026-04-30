@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://top-clancy-protocol.vercel.app";
 
 export const metadataBaseUrl = new URL(siteUrl);
 
@@ -10,6 +10,7 @@ type MetadataInput = {
   path: string;
   imagePath?: string;
   keywords?: string[];
+  robots?: Metadata["robots"];
 };
 
 export function buildPageMetadata({
@@ -18,6 +19,7 @@ export function buildPageMetadata({
   path,
   imagePath,
   keywords = [],
+  robots,
 }: MetadataInput): Metadata {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
   const normalizedImagePath = imagePath ?? `${normalizedPath === "/" ? "" : normalizedPath}/opengraph-image`;
@@ -28,6 +30,7 @@ export function buildPageMetadata({
     title,
     description,
     keywords,
+    robots,
     alternates: {
       canonical: canonicalUrl,
     },
